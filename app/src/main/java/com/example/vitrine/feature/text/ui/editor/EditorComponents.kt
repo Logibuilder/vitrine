@@ -7,12 +7,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,35 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.vitrine.feature.text.ui.theme.TextScreenColors
-
-internal val CardShape = RoundedCornerShape(24.dp)
-
-/** Carte sombre aux coins arrondis, avec une bordure fine. */
-@Composable
-internal fun GlassCard(content: @Composable ColumnScope.() -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(CardShape)
-            .background(TextScreenColors.Surface)
-            .border(1.dp, TextScreenColors.Stroke, CardShape)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        content = content,
-    )
-}
-
-/** Petit titre de section, en majuscules. */
-@Composable
-internal fun SectionLabel(text: String) {
-    Text(
-        text = text.uppercase(),
-        style = MaterialTheme.typography.labelMedium,
-        color = TextScreenColors.TextMuted,
-        letterSpacing = 1.5.sp,
-    )
-}
+import com.example.vitrine.ui.theme.VitrineColors
+import com.example.vitrine.ui.theme.VitrineShapes
 
 /** Pastille de couleur avec son libellé ; un anneau lumineux indique la sélection. */
 @Composable
@@ -61,13 +31,13 @@ internal fun ColorSwatch(
     onClick: () -> Unit,
 ) {
     val ring by animateColorAsState(
-        targetValue = if (selected) TextScreenColors.Cyan else Color.Transparent,
+        targetValue = if (selected) VitrineColors.Cyan else Color.Transparent,
         label = "swatch-ring",
     )
 
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(VitrineShapes.Control)
             .clickable(onClick = onClick)
             .padding(2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,7 +54,7 @@ internal fun ColorSwatch(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = if (selected) TextScreenColors.TextPrimary else TextScreenColors.TextMuted,
+            color = if (selected) VitrineColors.TextPrimary else VitrineColors.TextMuted,
         )
     }
 }

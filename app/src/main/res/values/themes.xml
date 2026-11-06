@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.Vitrine" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Thème sombre : évite un flash blanc au lancement, avant que Compose ne dessine. -->
+    <style name="Theme.Vitrine" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/vitrine_background</item>
+    </style>
 </resources>

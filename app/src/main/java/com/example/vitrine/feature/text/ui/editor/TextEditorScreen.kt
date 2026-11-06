@@ -1,6 +1,5 @@
 package com.example.vitrine.feature.text.ui.editor
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,10 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,21 +27,22 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
-import com.example.vitrine.core.ui.components.AppMenuBar
+import com.example.vitrine.core.ui.components.GlassCard
 import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.MarqueeText
+import com.example.vitrine.core.ui.components.SectionLabel
+import com.example.vitrine.core.ui.components.VitrineScreen
 import com.example.vitrine.feature.text.ui.model.BackgroundColorOptions
 import com.example.vitrine.feature.text.ui.model.ColorOption
 import com.example.vitrine.feature.text.ui.model.TextColorOptions
-import com.example.vitrine.feature.text.ui.theme.TextScreenColors
 import com.example.vitrine.feature.text.viewmodel.TextUiState
+import com.example.vitrine.ui.theme.VitrineColors
+import com.example.vitrine.ui.theme.VitrineDimens
 
 /**
  * Écran d'édition : saisie du message, aperçu animé, choix des couleurs et menu des fonctionnalités.
@@ -62,65 +59,36 @@ fun TextEditorScreen(
     onBgColor: (Int) -> Unit,
     onNavigate: (AppDestination) -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(TextScreenColors.Background),
+    VitrineScreen(
+        title = stringResource(R.string.text_title),
+        current = AppDestination.TEXT,
+        onNavigate = onNavigate,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                // Quand le clavier s'ouvre, l'aperçu rétrécit pour garder le bouton visible
-                .imePadding()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Header()
+        MessageField(
+            draft = state.draft,
+            canShow = state.canShow,
+            onDraftChange = onDraftChange,
+            onClear = onClearDraft,
+            onShow = onShow,
+        )
 
-            MessageField(
-                draft = state.draft,
-                canShow = state.canShow,
-                onDraftChange = onDraftChange,
-                onClear = onClearDraft,
-                onShow = onShow,
-            )
+        // L'aperçu prend la place restante (et rétrécit quand le clavier s'ouvre)
+        PreviewSection(
+            modifier = Modifier.weight(1f),
+            draft = state.draft,
+            textColor = Color(state.readableTextColorArgb),
+            bgColor = Color(state.bgColorArgb),
+            enabled = state.canShow,
+            onClick = onShow,
+        )
 
-            PreviewSection(
-                modifier = Modifier.weight(1f),
-                draft = state.draft,
-                textColor = Color(state.readableTextColorArgb),
-                bgColor = Color(state.bgColorArgb),
-                enabled = state.canShow,
-                onClick = onShow,
-            )
-
-            ColorsCard(
-                textColorArgb = state.textColorArgb,
-                bgColorArgb = state.bgColorArgb,
-                onTextColor = onTextColor,
-                onBgColor = onBgColor,
-            )
-
-            AppMenuBar(
-                current = AppDestination.TEXT,
-                onNavigate = onNavigate,
-            )
-        }
+        ColorsCard(
+            textColorArgb = state.textColorArgb,
+            bgColorArgb = state.bgColorArgb,
+            onTextColor = onTextColor,
+            onBgColor = onBgColor,
+        )
     }
-}
-
-@Composable
-private fun Header() {
-    Text(
-        text = stringResource(R.string.text_title),
-        style = MaterialTheme.typography.titleLarge,
-        color = TextScreenColors.TextPrimary,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth(),
-    )
 }
 
 /**
@@ -137,7 +105,7 @@ private fun MessageField(
 ) {
     GlassCard {
         SectionLabel(stringResource(R.string.text_section_message))
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(VitrineDimens.LabelGap))
         BasicTextField(
             value = draft,
             onValueChange = onDraftChange,
@@ -151,21 +119,21 @@ private fun MessageField(
             textStyle = TextStyle(
                 fontSize = 20.sp,
                 lineHeight = 28.sp,
-                color = TextScreenColors.TextPrimary,
+                color = VitrineColors.TextPrimary,
             ),
-            cursorBrush = SolidColor(TextScreenColors.Cyan),
+            cursorBrush = SolidColor(VitrineColors.Cyan),
             decorationBox = { inner ->
                 if (draft.isEmpty()) {
                     Text(
                         text = stringResource(R.string.text_placeholder),
-                        color = TextScreenColors.TextMuted,
+                        color = VitrineColors.TextMuted,
                         fontSize = 20.sp,
                     )
                 }
                 inner()
             },
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(VitrineDimens.LabelGap))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -174,13 +142,13 @@ private fun MessageField(
             Text(
                 text = stringResource(R.string.text_char_count, draft.length),
                 style = MaterialTheme.typography.labelSmall,
-                color = TextScreenColors.TextMuted,
+                color = VitrineColors.TextMuted,
             )
             if (draft.isNotEmpty()) {
                 Text(
                     text = stringResource(R.string.text_clear),
                     style = MaterialTheme.typography.labelMedium,
-                    color = TextScreenColors.Cyan,
+                    color = VitrineColors.Cyan,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .clickable(onClick = onClear)
@@ -212,15 +180,14 @@ private fun PreviewSection(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            //SectionLabel(stringResource(R.string.text_section_preview))
             if (enabled) {
                 Text(
                     text = stringResource(R.string.text_preview_hint),
                     style = MaterialTheme.typography.labelSmall,
-                    color = TextScreenColors.Cyan,
+                    color = VitrineColors.Cyan,
                 )
             }
         }
@@ -269,13 +236,13 @@ private fun ColorsCard(
 ) {
     GlassCard {
         SectionLabel(stringResource(R.string.text_section_text_color))
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(VitrineDimens.LabelGap))
         ColorRow(TextColorOptions, selectedArgb = textColorArgb, onSelect = onTextColor)
 
         Spacer(Modifier.height(12.dp))
 
         SectionLabel(stringResource(R.string.text_section_bg_color))
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(VitrineDimens.LabelGap))
         ColorRow(BackgroundColorOptions, selectedArgb = bgColorArgb, onSelect = onBgColor)
     }
 }

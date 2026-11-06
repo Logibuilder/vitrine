@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Feature texte : écran d'édition -->
-    <string name="text_eyebrow">TEXTE GÉANT</string>
     <string name="text_title">Votre message, en très grand</string>
     <string name="text_section_message">Message</string>
     <string name="text_placeholder">Saisir le message à afficher…</string>

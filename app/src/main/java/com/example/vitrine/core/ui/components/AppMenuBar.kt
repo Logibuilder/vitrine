@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,14 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
+import com.example.vitrine.ui.theme.VitrineColors
+import com.example.vitrine.ui.theme.VitrineShapes
 
 /**
  * Menu de navigation entre les fonctionnalités, en forme de pilule.
@@ -40,15 +39,15 @@ fun AppMenuBar(
     onNavigate: (AppDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(20.dp)
+    val shape = VitrineShapes.Menu
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
             .clip(shape)
-            .background(colorResource(R.color.vitrine_surface))
-            .border(1.dp, colorResource(R.color.vitrine_stroke), shape)
+            .background(VitrineColors.Surface)
+            .border(1.dp, VitrineColors.Stroke, shape)
             .padding(5.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -70,12 +69,11 @@ private fun MenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(15.dp)
-    val violet = colorResource(R.color.vitrine_accent_violet)
-    val cyan = colorResource(R.color.vitrine_accent_cyan)
+    val shape = VitrineShapes.Control
+    val violet = VitrineColors.Violet
+    val cyan = VitrineColors.Cyan
     val textColor by animateColorAsState(
-        targetValue = if (selected) colorResource(R.color.vitrine_background)
-        else colorResource(R.color.vitrine_text_muted),
+        targetValue = if (selected) VitrineColors.Background else VitrineColors.TextMuted,
         label = "menu-item-text",
     )
 
