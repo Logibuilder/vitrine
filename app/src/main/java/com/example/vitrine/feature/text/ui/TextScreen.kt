@@ -1,5 +1,6 @@
 package com.example.vitrine.feature.text.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,9 @@ fun TextScreen(
     viewModel: TextViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Retour du téléphone en plein écran : revient à l'édition au lieu de quitter l'application
+    BackHandler(enabled = state.isFullScreen, onBack = viewModel::exitFullScreen)
 
     if (state.isFullScreen) {
         TextDisplayScreen(

@@ -1,8 +1,5 @@
 package com.example.vitrine.feature.text.ui.display
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
-import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,15 +7,11 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import com.example.vitrine.core.ui.components.FullScreenDisplayEffect
 import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.LedFrameDefaults
 import com.example.vitrine.core.ui.components.MarqueeText
@@ -69,39 +62,6 @@ fun TextDisplayScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     MarqueeText(text = text, color = textColor)
-                }
-            }
-        }
-    }
-}
-
-/**
- * Pendant l'affichage : force le paysage, garde l'écran allumé et cache les barres système.
- * Tout est restauré en quittant l'affichage, mais pas pendant une rotation
- * (l'activité est alors recréée et l'affichage continue).
- */
-@Composable
-private fun FullScreenDisplayEffect() {
-    val activity = LocalView.current.context as? Activity
-
-    DisposableEffect(activity) {
-        val window = activity?.window
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window?.let { w ->
-            WindowCompat.getInsetsController(w, w.decorView).apply {
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                hide(WindowInsetsCompat.Type.systemBars())
-            }
-        }
-
-        onDispose {
-            if (activity?.isChangingConfigurations != true) {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                window?.let { w ->
-                    WindowCompat.getInsetsController(w, w.decorView)
-                        .show(WindowInsetsCompat.Type.systemBars())
                 }
             }
         }

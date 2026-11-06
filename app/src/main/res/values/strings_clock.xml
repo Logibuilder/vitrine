@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Feature horloge (le titre clock_title est dans strings_menu.xml) -->
+    <string name="clock_tap_hint">Touchez pour afficher</string>
+    <string name="clock_style_label">Style</string>
+    <string name="clock_style_digital">Chiffres</string>
+    <string name="clock_style_analog">Aiguilles</string>
+    <string name="clock_format_label">Format</string>
+    <string name="clock_format_24">24 h</string>
+    <string name="clock_format_12">12 h</string>
+    <string name="clock_seconds_label">Secondes</string>
+    <string name="clock_seconds_show">Afficher</string>
+    <string name="clock_seconds_hide">Masquer</string>
+</resources>

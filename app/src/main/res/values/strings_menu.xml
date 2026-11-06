@@ -9,7 +9,6 @@
     <!-- Fonctionnalités pas encore développées -->
     <string name="coming_soon">Bientôt disponible</string>
     <string name="clock_title">L\'heure, en très grand</string>
-    <string name="clock_coming_soon">Une horloge plein écran, lisible de loin.</string>
     <string name="flashlight_title">Votre écran, en lampe</string>
     <string name="flashlight_coming_soon">L\'écran devient une lumière réglable en couleur et en intensité.</string>
     <string name="timer_title">Vos minuteurs</string>

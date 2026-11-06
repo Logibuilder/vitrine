@@ -1,6 +1,7 @@
 package com.example.vitrine.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,15 +18,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineDimens
 import com.example.vitrine.ui.theme.VitrineShapes
 
-/** Carte plate : fond blanc, coins arrondis, ni bordure ni ombre. Brique de base de tous les écrans. */
+/**
+ * Carte plate : fond de surface, coins arrondis, ni bordure ni ombre. Brique de base de tous les écrans.
+ * Avec [onClick], toute la carte devient touchable (effet d'appui dessiné par-dessus le fond).
+ */
 @Composable
 fun VitrineCard(
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    onClickLabel: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -33,6 +40,13 @@ fun VitrineCard(
             .fillMaxWidth()
             .clip(VitrineShapes.Card)
             .background(VitrineColors.Surface)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClickLabel = onClickLabel, role = Role.Button, onClick = onClick)
+                } else {
+                    Modifier
+                }
+            )
             .padding(VitrineDimens.CardPadding),
         content = content,
     )

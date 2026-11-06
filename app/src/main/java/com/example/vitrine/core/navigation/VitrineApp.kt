@@ -20,14 +20,16 @@ fun VitrineApp() {
     var destination by rememberSaveable { mutableStateOf(AppDestination.TEXT) }
     val navigate: (AppDestination) -> Unit = { destination = it }
 
+    // Déclaré avant les écrans : un écran peut ainsi intercepter le retour en priorité
+    // (ex. quitter le plein écran avant de changer d'écran).
+    BackHandler(enabled = destination != AppDestination.TEXT) {
+        destination = AppDestination.TEXT
+    }
+
     when (destination) {
         AppDestination.TEXT -> TextScreen(onNavigate = navigate)
         AppDestination.CLOCK -> ClockScreen(onNavigate = navigate)
         AppDestination.FLASHLIGHT -> FlashlightScreen(onNavigate = navigate)
         AppDestination.TIMER -> TimerScreen(onNavigate = navigate)
-    }
-
-    BackHandler(enabled = destination != AppDestination.TEXT) {
-        destination = AppDestination.TEXT
     }
 }
