@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mode sombre : fond sombre dès le lancement, pas de flash clair. -->
+    <style name="Theme.Vitrine" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/vitrine_dark_background</item>
+    </style>
+</resources>

@@ -1,6 +1,18 @@
 package com.example.vitrine.feature.text.ui.editor
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +29,18 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -51,6 +69,7 @@ import com.example.vitrine.ui.theme.VitrineShapes
  * Toucher l'aperçu affiche le message en plein écran.
  * Tout tient sur un seul écran : l'aperçu prend la place restante.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TextEditorScreen(
     state: TextUiState,
@@ -66,32 +85,114 @@ fun TextEditorScreen(
         current = AppDestination.TEXT,
         onNavigate = onNavigate,
     ) {
-        MessageField(
-            draft = state.draft,
-            canShow = state.canShow,
-            onDraftChange = onDraftChange,
-            onClear = onClearDraft,
-            onShow = onShow,
-        )
+        val keyboardVisible = WindowInsets.isImeVisible
 
-        // L'aperçu prend la place restante (et rétrécit quand le clavier s'ouvre)
-        PreviewSection(
-            modifier = Modifier.weight(1f),
-            draft = state.draft,
-            textColor = Color(state.readableTextColorArgb),
-            bgColor = Color(state.bgColorArgb),
-            enabled = state.canShow,
-            onClick = onShow,
-        )
+        val message: @Composable () -> Unit = {
+            MessageField(
+                draft = state.draft,
+                canShow = state.canShow,
+                onDraftChange = onDraftChange,
+                onClear = onClearDraft,
+                onShow = onShow,
+            )
+        }
+        val colors: @Composable () -> Unit = {
+            ColorsCard(
+                textColorArgb = state.textColorArgb,
+                bgColorArgb = state.bgColorArgb,
+                onTextColor = onTextColor,
+                onBgColor = onBgColor,
+            )
+        }
+        val preview: @Composable (Modifier) -> Unit = { modifier ->
+            PreviewSection(
+                modifier = modifier,
+                draft = state.draft,
+                textColor = Color(state.readableTextColorArgb),
+                bgColor = Color(state.bgColorArgb),
+                enabled = state.canShow,
+                onClick = onShow,
+            )
+        }
 
-        ColorsCard(
-            textColorArgb = state.textColorArgb,
-            bgColorArgb = state.bgColorArgb,
-            onTextColor = onTextColor,
-            onBgColor = onBgColor,
-        )
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            val gap = VitrineDimens.SectionGap
+
+            if (maxWidth > maxHeight) {
+                // Paysage : deux colonnes. À gauche la saisie et les couleurs (qui défilent si besoin),
+                // à droite l'aperçu sur toute la hauteur. S'il reste trop peu de place (clavier ouvert),
+                // l'ensemble garde la hauteur minimale de l'aperçu et devient défilable.
+                val rowHeight = maxOf(maxHeight, PreviewMinHeight)
+                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(rowHeight),
+                        horizontalArrangement = Arrangement.spacedBy(gap),
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.spacedBy(gap),
+                        ) {
+                            message()
+                            colors()
+                        }
+                        preview(
+                            Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        )
+                    }
+                }
+            } else {
+                // Portrait : saisie, aperçu, couleurs. L'aperçu prend la place restante
+                // sans jamais descendre sous sa hauteur minimale ; si ça ne tient pas, l'écran défile.
+                // Pendant la saisie, les couleurs se masquent pour laisser la place à l'aperçu.
+                var messageHeight by remember { mutableIntStateOf(0) }
+                var colorsHeight by remember { mutableIntStateOf(0) }
+                val density = LocalDensity.current
+
+                val otherHeights = with(density) {
+                    val colors = if (keyboardVisible) 0 else colorsHeight
+                    (messageHeight + colors).toDp()
+                }
+                val gaps = if (keyboardVisible) gap else gap * 2
+                val previewHeight = (maxHeight - otherHeights - gaps).coerceAtLeast(PreviewMinHeight)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(gap),
+                ) {
+                    Box(Modifier.onSizeChanged { messageHeight = it.height }) { message() }
+                    preview(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(previewHeight)
+                    )
+                    AnimatedVisibility(
+                        visible = !keyboardVisible,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        Box(Modifier.onSizeChanged { colorsHeight = it.height }) { colors() }
+                    }
+                }
+            }
+        }
     }
 }
+
+/** Hauteur minimale de l'aperçu : il reste toujours visible, même clavier ouvert. */
+private val PreviewMinHeight = 96.dp
 
 /**
  * Champ de saisie de 3 lignes de haut : le texte revient à la ligne tout seul,

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bouton de thème (lu par TalkBack) -->
+    <string name="theme_change">Changer le thème</string>
+    <string name="theme_mode_light">Thème clair</string>
+    <string name="theme_mode_dark">Thème sombre</string>
+</resources>

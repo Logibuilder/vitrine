@@ -27,6 +27,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.vitrine.R
+import com.example.vitrine.ui.theme.VitrineColors
 import kotlin.math.PI
 import kotlin.math.cos
 
@@ -43,17 +44,17 @@ object LedFrameDefaults {
         return remember(c1, c2, c3, c4) { listOf(c1, c2, c3, c4) }
     }
 
-    /** Support de la guirlande, dans les écrans clairs (aperçu). */
+    /** Support de la guirlande dans l'interface (aperçu) : la couleur des cartes, claire ou sombre. */
     @Composable
-    fun baseColor(): Color = colorResource(R.color.led_base)
+    fun baseColor(): Color = VitrineColors.Surface
 
     /** Support de la guirlande en plein écran, sombre pour faire ressortir les LEDs. */
     @Composable
     fun displayBaseColor(): Color = colorResource(R.color.led_base_display)
 
-    /** LED éteinte, dans les écrans clairs. */
+    /** LED éteinte dans l'interface : la couleur des contours, claire ou sombre. */
     @Composable
-    fun offColor(): Color = colorResource(R.color.led_off)
+    fun offColor(): Color = VitrineColors.Divider
 
     /** LED éteinte en plein écran. */
     @Composable

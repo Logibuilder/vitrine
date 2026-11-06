@@ -2,6 +2,6 @@
 <resources>
     <!-- Thème clair : même fond que l'application, pas de flash au lancement. -->
     <style name="Theme.Vitrine" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/vitrine_background</item>
+        <item name="android:windowBackground">@color/vitrine_light_background</item>
     </style>
 </resources>
