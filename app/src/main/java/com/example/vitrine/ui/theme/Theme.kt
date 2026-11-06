@@ -2,29 +2,29 @@ package com.example.vitrine.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 /**
- * Thème unique de l'application : sombre, avec les accents violet et cyan.
- * Les couleurs dynamiques (Material You) et le thème clair sont volontairement désactivés
+ * Thème unique de l'application : plat et clair, accents vert et ambre.
+ * Les couleurs dynamiques (Material You) et le thème sombre sont volontairement désactivés
  * pour que l'application garde la même identité sur tous les téléphones.
  */
 @Composable
 fun VitrineTheme(content: @Composable () -> Unit) {
-    val colorScheme = darkColorScheme(
-        primary = VitrineColors.Cyan,
-        onPrimary = VitrineColors.Background,
-        secondary = VitrineColors.Violet,
+    val colorScheme = lightColorScheme(
+        primary = VitrineColors.Accent,
+        onPrimary = Color.White,
+        secondary = VitrineColors.Warning,
         onSecondary = Color.White,
         background = VitrineColors.Background,
         onBackground = VitrineColors.TextPrimary,
         surface = VitrineColors.Surface,
         onSurface = VitrineColors.TextPrimary,
-        surfaceVariant = VitrineColors.Surface,
+        surfaceVariant = VitrineColors.SurfaceMuted,
         onSurfaceVariant = VitrineColors.TextMuted,
-        outline = VitrineColors.Stroke,
+        outline = VitrineColors.Divider,
     )
 
     MaterialTheme(

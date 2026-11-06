@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
-import com.example.vitrine.core.ui.components.GlassCard
+import com.example.vitrine.core.ui.components.VitrineCard
 import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.MarqueeText
 import com.example.vitrine.core.ui.components.SectionLabel
+import com.example.vitrine.core.ui.components.StatusDot
 import com.example.vitrine.core.ui.components.VitrineScreen
 import com.example.vitrine.feature.text.ui.model.BackgroundColorOptions
 import com.example.vitrine.feature.text.ui.model.ColorOption
@@ -43,6 +44,7 @@ import com.example.vitrine.feature.text.ui.model.TextColorOptions
 import com.example.vitrine.feature.text.viewmodel.TextUiState
 import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineDimens
+import com.example.vitrine.ui.theme.VitrineShapes
 
 /**
  * Écran d'édition : saisie du message, aperçu animé, choix des couleurs et menu des fonctionnalités.
@@ -103,7 +105,7 @@ private fun MessageField(
     onClear: () -> Unit,
     onShow: () -> Unit,
 ) {
-    GlassCard {
+    VitrineCard {
         SectionLabel(stringResource(R.string.text_section_message))
         Spacer(Modifier.height(VitrineDimens.LabelGap))
         BasicTextField(
@@ -121,7 +123,7 @@ private fun MessageField(
                 lineHeight = 28.sp,
                 color = VitrineColors.TextPrimary,
             ),
-            cursorBrush = SolidColor(VitrineColors.Cyan),
+            cursorBrush = SolidColor(VitrineColors.Accent),
             decorationBox = { inner ->
                 if (draft.isEmpty()) {
                     Text(
@@ -148,7 +150,7 @@ private fun MessageField(
                 Text(
                     text = stringResource(R.string.text_clear),
                     style = MaterialTheme.typography.labelMedium,
-                    color = VitrineColors.Cyan,
+                    color = VitrineColors.Accent,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .clickable(onClick = onClear)
@@ -172,24 +174,26 @@ private fun PreviewSection(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(22.dp)
+    val shape = VitrineShapes.Card
 
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (enabled) {
-                Text(
-                    text = stringResource(R.string.text_preview_hint),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = VitrineColors.Cyan,
-                )
-            }
+            // Comme « ● Charging » : point vert quand l'aperçu est prêt à être affiché
+            StatusDot(
+                text = stringResource(
+                    if (enabled) R.string.text_preview_hint else R.string.text_preview_waiting
+                ),
+                color = if (enabled) VitrineColors.Accent else VitrineColors.Divider,
+            )
         }
         LedFrame(
             contentColor = bgColor,
@@ -203,7 +207,7 @@ private fun PreviewSection(
                     role = Role.Button,
                     onClick = onClick,
                 ),
-            cornerRadius = 22.dp,
+            cornerRadius = VitrineDimens.CardRadius,
             ledBand = 12.dp,
             ledSpacing = 15.dp,
         ) {
@@ -234,7 +238,7 @@ private fun ColorsCard(
     onTextColor: (Int) -> Unit,
     onBgColor: (Int) -> Unit,
 ) {
-    GlassCard {
+    VitrineCard {
         SectionLabel(stringResource(R.string.text_section_text_color))
         Spacer(Modifier.height(VitrineDimens.LabelGap))
         ColorRow(TextColorOptions, selectedArgb = textColorArgb, onSelect = onTextColor)

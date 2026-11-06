@@ -16,13 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineDimens
 
 /**
  * Gabarit commun à tous les écrans de l'application :
- * fond sombre, titre centré en haut, contenu au milieu, menu des fonctionnalités en bas.
+ * fond gris clair, titre centré en haut, contenu au milieu, menu des fonctionnalités en bas.
  *
  * Le contenu reçoit un [ColumnScope] : un bloc avec `Modifier.weight(1f)` prend la place restante,
  * ce qui permet de tout faire tenir sur un seul écran.
@@ -53,7 +54,7 @@ fun VitrineScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(VitrineDimens.SectionGap),
         ) {
-            ScreenTitle(title)
+            ScreenTitle(title, modifier = Modifier.padding(vertical = 6.dp))
 
             Column(
                 modifier = Modifier
@@ -70,12 +71,15 @@ fun VitrineScreen(
 
 /** Titre d'écran, centré. */
 @Composable
-fun ScreenTitle(text: String) {
+fun ScreenTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = text,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.titleMedium,
         color = VitrineColors.TextPrimary,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     )
 }

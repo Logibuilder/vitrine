@@ -3,14 +3,11 @@ package com.example.vitrine.core.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.vitrine.R
 import com.example.vitrine.ui.theme.VitrineColors
@@ -21,24 +18,16 @@ fun ComingSoonCard(
     description: String,
     modifier: Modifier = Modifier,
 ) {
-    GlassCard(modifier = modifier) {
+    VitrineCard(modifier = modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(
-                text = stringResource(R.string.coming_soon),
-                style = MaterialTheme.typography.titleMedium,
-                color = VitrineColors.Cyan,
-            )
+            StatusDot(text = stringResource(R.string.coming_soon), color = VitrineColors.Warning)
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = VitrineColors.TextMuted,
-                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineMedium,
+                color = VitrineColors.TextPrimary,
             )
         }
     }

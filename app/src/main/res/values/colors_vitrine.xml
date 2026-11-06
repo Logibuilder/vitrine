@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Interface premium -->
-    <color name="vitrine_background">#FF07080F</color>
-    <color name="vitrine_surface">#FF12142A</color>
-    <color name="vitrine_stroke">#26FFFFFF</color>
-    <color name="vitrine_text_primary">#FFF4F6FF</color>
-    <color name="vitrine_text_muted">#FF8B92B5</color>
-    <color name="vitrine_accent_cyan">#FF22D3EE</color>
-    <color name="vitrine_accent_violet">#FF8B5CF6</color>
+    <!-- Interface : design plat et clair -->
+    <color name="vitrine_background">#FFF1F1F1</color>     <!-- fond des écrans -->
+    <color name="vitrine_surface">#FFFFFFFF</color>        <!-- cartes, menu -->
+    <color name="vitrine_surface_muted">#FFF0F0F0</color>  <!-- élément sélectionné, boutons ronds -->
+    <color name="vitrine_divider">#FFE6E6E6</color>        <!-- contours discrets -->
+    <color name="vitrine_text_primary">#FF111111</color>
+    <color name="vitrine_text_muted">#FF8E8E93</color>
+    <color name="vitrine_accent">#FF4CA34A</color>         <!-- vert : état actif, curseur -->
+    <color name="vitrine_warning">#FFE3A43A</color>        <!-- ambre : attention, bientôt -->
 
     <!-- Guirlande de LEDs -->
-    <color name="led_base">#FF050509</color>   <!-- support de la guirlande -->
-    <color name="led_off">#FF1C1E2E</color>    <!-- LED éteinte -->
-    <color name="led_cyan">#FF22D3EE</color>
-    <color name="led_violet">#FF8B5CF6</color>
-    <color name="led_pink">#FFF472B6</color>
-    <color name="led_amber">#FFFBBF24</color>
+    <color name="led_base">#FFFFFFFF</color>               <!-- support (aperçu) -->
+    <color name="led_base_display">#FF0A0A0A</color>       <!-- support (plein écran) -->
+    <color name="led_off">#FFE4E4E4</color>                <!-- LED éteinte (aperçu) -->
+    <color name="led_off_display">#FF1E1E1E</color>        <!-- LED éteinte (plein écran) -->
+    <color name="led_color_1">#FF4CA34A</color>
+    <color name="led_color_2">#FFE3A43A</color>
+    <color name="led_color_3">#FFE86F5C</color>
+    <color name="led_color_4">#FF4C8DF6</color>
 
     <!-- Couleurs proposées pour le texte -->
     <color name="text_white">#FFFFFFFF</color>

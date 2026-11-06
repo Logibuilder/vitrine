@@ -41,12 +41,14 @@ fun TextDisplayScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LedFrameDefaults.baseColor())
+            .background(LedFrameDefaults.displayBaseColor())
             .clickable(onClick = onExit),
     ) {
         LedFrame(
             contentColor = bgColor,
             modifier = Modifier.fillMaxSize(),
+            baseColor = LedFrameDefaults.displayBaseColor(),
+            offColor = LedFrameDefaults.displayOffColor(),
             cornerRadius = 28.dp,
             ledBand = 20.dp,
             ledSpacing = 24.dp,

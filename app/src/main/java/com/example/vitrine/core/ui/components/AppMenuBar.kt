@@ -2,7 +2,6 @@ package com.example.vitrine.core.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -30,8 +28,8 @@ import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineShapes
 
 /**
- * Menu de navigation entre les fonctionnalités, en forme de pilule.
- * L'élément courant est mis en avant par un dégradé violet -> cyan.
+ * Menu de navigation entre les fonctionnalités, plat :
+ * une carte blanche, l'élément courant dans une pilule gris clair (comme un sélecteur « 1d / 7d / 14d »).
  */
 @Composable
 fun AppMenuBar(
@@ -39,16 +37,13 @@ fun AppMenuBar(
     onNavigate: (AppDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = VitrineShapes.Menu
-
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
-            .clip(shape)
+            .height(52.dp)
+            .clip(VitrineShapes.Menu)
             .background(VitrineColors.Surface)
-            .border(1.dp, VitrineColors.Stroke, shape)
-            .padding(5.dp),
+            .padding(6.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         AppDestination.entries.forEach { destination ->
@@ -69,22 +64,20 @@ private fun MenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = VitrineShapes.Control
-    val violet = VitrineColors.Violet
-    val cyan = VitrineColors.Cyan
+    val background by animateColorAsState(
+        targetValue = if (selected) VitrineColors.SurfaceMuted else Color.Transparent,
+        label = "menu-item-background",
+    )
     val textColor by animateColorAsState(
-        targetValue = if (selected) VitrineColors.Background else VitrineColors.TextMuted,
+        targetValue = if (selected) VitrineColors.TextPrimary else VitrineColors.TextMuted,
         label = "menu-item-text",
     )
 
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .clip(shape)
-            .then(
-                if (selected) Modifier.background(Brush.horizontalGradient(listOf(violet, cyan)))
-                else Modifier.background(Color.Transparent)
-            )
+            .clip(VitrineShapes.Pill)
+            .background(background)
             .clickable(role = Role.Tab, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {

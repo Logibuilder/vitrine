@@ -11,21 +11,24 @@ import com.example.vitrine.R
  * Les getters sont @Composable car colorResource() a besoin du contexte Compose.
  */
 object VitrineColors {
-    /** Fond des écrans. */
+    /** Fond des écrans (gris très clair). */
     val Background: Color @Composable get() = colorResource(R.color.vitrine_background)
 
-    /** Fond des cartes et du menu. */
+    /** Fond des cartes et du menu (blanc). */
     val Surface: Color @Composable get() = colorResource(R.color.vitrine_surface)
 
-    /** Bordure fine des cartes. */
-    val Stroke: Color @Composable get() = colorResource(R.color.vitrine_stroke)
+    /** Élément sélectionné, boutons ronds, zones en retrait. */
+    val SurfaceMuted: Color @Composable get() = colorResource(R.color.vitrine_surface_muted)
+
+    /** Contours discrets (pastilles blanches, séparateurs). */
+    val Divider: Color @Composable get() = colorResource(R.color.vitrine_divider)
 
     val TextPrimary: Color @Composable get() = colorResource(R.color.vitrine_text_primary)
     val TextMuted: Color @Composable get() = colorResource(R.color.vitrine_text_muted)
 
-    /** Accent principal : sélection, liens, curseur. */
-    val Cyan: Color @Composable get() = colorResource(R.color.vitrine_accent_cyan)
+    /** Vert : état actif, curseur, actions. */
+    val Accent: Color @Composable get() = colorResource(R.color.vitrine_accent)
 
-    /** Accent secondaire : début des dégradés. */
-    val Violet: Color @Composable get() = colorResource(R.color.vitrine_accent_violet)
+    /** Ambre : attention, fonctionnalité à venir. */
+    val Warning: Color @Composable get() = colorResource(R.color.vitrine_warning)
 }

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineShapes
 
-/** Pastille de couleur avec son libellé ; un anneau lumineux indique la sélection. */
+/** Pastille de couleur avec son libellé ; un anneau foncé indique la sélection. */
 @Composable
 internal fun ColorSwatch(
     label: String,
@@ -31,7 +31,7 @@ internal fun ColorSwatch(
     onClick: () -> Unit,
 ) {
     val ring by animateColorAsState(
-        targetValue = if (selected) VitrineColors.Cyan else Color.Transparent,
+        targetValue = if (selected) VitrineColors.TextPrimary else Color.Transparent,
         label = "swatch-ring",
     )
 
@@ -49,7 +49,9 @@ internal fun ColorSwatch(
                 .border(2.dp, ring, CircleShape)
                 .padding(4.dp)
                 .clip(CircleShape)
-                .background(color),
+                .background(color)
+                // Contour discret : une pastille blanche reste visible sur une carte blanche
+                .border(1.dp, VitrineColors.Divider, CircleShape),
         )
         Text(
             text = label,

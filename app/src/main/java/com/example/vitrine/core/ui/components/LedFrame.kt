@@ -36,20 +36,28 @@ object LedFrameDefaults {
     /** Couleurs des LEDs, dans l'ordre où elles se suivent sur la guirlande. */
     @Composable
     fun palette(): List<Color> {
-        val c1 = colorResource(R.color.led_cyan)
-        val c2 = colorResource(R.color.led_violet)
-        val c3 = colorResource(R.color.led_pink)
-        val c4 = colorResource(R.color.led_amber)
+        val c1 = colorResource(R.color.led_color_1)
+        val c2 = colorResource(R.color.led_color_2)
+        val c3 = colorResource(R.color.led_color_3)
+        val c4 = colorResource(R.color.led_color_4)
         return remember(c1, c2, c3, c4) { listOf(c1, c2, c3, c4) }
     }
 
-    /** Support de la guirlande. */
+    /** Support de la guirlande, dans les écrans clairs (aperçu). */
     @Composable
     fun baseColor(): Color = colorResource(R.color.led_base)
 
-    /** LED éteinte. */
+    /** Support de la guirlande en plein écran, sombre pour faire ressortir les LEDs. */
+    @Composable
+    fun displayBaseColor(): Color = colorResource(R.color.led_base_display)
+
+    /** LED éteinte, dans les écrans clairs. */
     @Composable
     fun offColor(): Color = colorResource(R.color.led_off)
+
+    /** LED éteinte en plein écran. */
+    @Composable
+    fun displayOffColor(): Color = colorResource(R.color.led_off_display)
 }
 
 /**
