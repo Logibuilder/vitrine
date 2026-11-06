@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Interface premium -->
+    <color name="vitrine_background">#FF07080F</color>
+    <color name="vitrine_surface">#FF12142A</color>
+    <color name="vitrine_stroke">#26FFFFFF</color>
+    <color name="vitrine_text_primary">#FFF4F6FF</color>
+    <color name="vitrine_text_muted">#FF8B92B5</color>
+    <color name="vitrine_accent_cyan">#FF22D3EE</color>
+    <color name="vitrine_accent_violet">#FF8B5CF6</color>
+
+    <!-- Guirlande de LEDs -->
+    <color name="led_base">#FF050509</color>   <!-- support de la guirlande -->
+    <color name="led_off">#FF1C1E2E</color>    <!-- LED éteinte -->
+    <color name="led_cyan">#FF22D3EE</color>
+    <color name="led_violet">#FF8B5CF6</color>
+    <color name="led_pink">#FFF472B6</color>
+    <color name="led_amber">#FFFBBF24</color>
+
+    <!-- Couleurs proposées pour le texte -->
+    <color name="text_white">#FFFFFFFF</color>
+    <color name="text_yellow">#FFFFFF00</color>
+    <color name="text_green">#FF00FF00</color>
+    <color name="text_red">#FFFF0000</color>
+
+    <!-- Couleurs proposées pour le fond -->
+    <color name="bg_black">#FF000000</color>
+    <color name="bg_night_blue">#FF001133</color>
+    <color name="bg_night_red">#FF220000</color>
+    <color name="bg_white">#FFFFFFFF</color>
+</resources>

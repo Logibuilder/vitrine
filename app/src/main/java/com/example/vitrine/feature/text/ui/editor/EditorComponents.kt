@@ -1,0 +1,120 @@
+package com.example.vitrine.feature.text.ui.editor
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.vitrine.feature.text.ui.theme.TextScreenColors
+
+internal val CardShape = RoundedCornerShape(24.dp)
+
+/** Carte sombre aux coins arrondis, avec une bordure fine. */
+@Composable
+internal fun GlassCard(content: @Composable ColumnScope.() -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(CardShape)
+            .background(TextScreenColors.Surface)
+            .border(1.dp, TextScreenColors.Stroke, CardShape)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        content = content,
+    )
+}
+
+/** Petit titre de section, en majuscules. */
+@Composable
+internal fun SectionLabel(text: String) {
+    Text(
+        text = text.uppercase(),
+        style = MaterialTheme.typography.labelMedium,
+        color = TextScreenColors.TextMuted,
+        letterSpacing = 1.5.sp,
+    )
+}
+
+/** Pastille de couleur avec son libellé ; un anneau lumineux indique la sélection. */
+@Composable
+internal fun ColorSwatch(
+    label: String,
+    color: Color,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val ring by animateColorAsState(
+        targetValue = if (selected) TextScreenColors.Cyan else Color.Transparent,
+        label = "swatch-ring",
+    )
+
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .border(2.dp, ring, CircleShape)
+                .padding(4.dp)
+                .clip(CircleShape)
+                .background(color),
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = if (selected) TextScreenColors.TextPrimary else TextScreenColors.TextMuted,
+        )
+    }
+}
+
+/** Bouton principal en dégradé violet -> cyan. */
+@Composable
+internal fun GradientButton(
+    text: String,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .alpha(if (enabled) 1f else 0.4f)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Brush.horizontalGradient(listOf(TextScreenColors.Violet, TextScreenColors.Cyan)))
+            .clickable(enabled = enabled, onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            color = TextScreenColors.Background,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}

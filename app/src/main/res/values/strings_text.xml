@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Feature texte : écran d'édition -->
+    <string name="text_eyebrow">TEXTE GÉANT</string>
+    <string name="text_title">Votre message, en très grand.</string>
+    <string name="text_section_message">Message</string>
+    <string name="text_placeholder">Saisir le message à afficher…</string>
+    <string name="text_char_count">%1$d caractères</string>
+    <string name="text_clear">Effacer</string>
+    <string name="text_section_preview">Aperçu</string>
+    <string name="text_preview_empty">Votre aperçu apparaîtra ici</string>
+    <string name="text_section_text_color">Couleur du texte</string>
+    <string name="text_section_bg_color">Couleur du fond</string>
+    <string name="text_show_full_screen">Afficher en plein écran</string>
+
+    <!-- Noms des couleurs -->
+    <string name="color_white">Blanc</string>
+    <string name="color_yellow">Jaune</string>
+    <string name="color_green">Vert</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_black">Noir</string>
+    <string name="color_night_blue">Bleu nuit</string>
+    <string name="color_night_red">Rouge nuit</string>
+</resources>
