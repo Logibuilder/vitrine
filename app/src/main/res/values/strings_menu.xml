@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Menu de navigation entre les fonctionnalités -->
+    <string name="menu_text">Texte</string>
+    <string name="menu_clock">Horloge</string>
+    <string name="menu_flashlight">Lampe</string>
+    <string name="menu_timer">Minuteur</string>
+</resources>

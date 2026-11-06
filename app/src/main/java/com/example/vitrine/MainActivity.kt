@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             VitrineTheme {
 
-                TextScreen()
+                TextScreen(onNavigate = {})
             }
         }
     }

@@ -2,7 +2,7 @@
 <resources>
     <!-- Feature texte : écran d'édition -->
     <string name="text_eyebrow">TEXTE GÉANT</string>
-    <string name="text_title">Votre message, en très grand.</string>
+    <string name="text_title">Votre message, en très grand</string>
     <string name="text_section_message">Message</string>
     <string name="text_placeholder">Saisir le message à afficher…</string>
     <string name="text_char_count">%1$d caractères</string>
@@ -11,6 +11,8 @@
     <string name="text_preview_empty">Votre aperçu apparaîtra ici</string>
     <string name="text_section_text_color">Couleur du texte</string>
     <string name="text_section_bg_color">Couleur du fond</string>
+    <string name="text_preview_hint">Touchez pour afficher</string>
+    <!-- Lu par TalkBack quand on touche l'aperçu -->
     <string name="text_show_full_screen">Afficher en plein écran</string>
 
     <!-- Noms des couleurs -->

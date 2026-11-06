@@ -29,12 +29,16 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vitrine.R
+import com.example.vitrine.core.navigation.AppDestination
+import com.example.vitrine.core.ui.components.AppMenuBar
 import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.MarqueeText
 import com.example.vitrine.feature.text.ui.model.BackgroundColorOptions
@@ -44,7 +48,8 @@ import com.example.vitrine.feature.text.ui.theme.TextScreenColors
 import com.example.vitrine.feature.text.viewmodel.TextUiState
 
 /**
- * Écran d'édition : saisie du message, aperçu animé, choix des couleurs et bouton d'affichage.
+ * Écran d'édition : saisie du message, aperçu animé, choix des couleurs et menu des fonctionnalités.
+ * Toucher l'aperçu affiche le message en plein écran.
  * Tout tient sur un seul écran : l'aperçu prend la place restante.
  */
 @Composable
@@ -55,6 +60,7 @@ fun TextEditorScreen(
     onShow: () -> Unit,
     onTextColor: (Int) -> Unit,
     onBgColor: (Int) -> Unit,
+    onNavigate: (AppDestination) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -86,6 +92,8 @@ fun TextEditorScreen(
                 draft = state.draft,
                 textColor = Color(state.readableTextColorArgb),
                 bgColor = Color(state.bgColorArgb),
+                enabled = state.canShow,
+                onClick = onShow,
             )
 
             ColorsCard(
@@ -95,10 +103,9 @@ fun TextEditorScreen(
                 onBgColor = onBgColor,
             )
 
-            GradientButton(
-                text = stringResource(R.string.text_show_full_screen),
-                enabled = state.canShow,
-                onClick = onShow,
+            AppMenuBar(
+                current = AppDestination.TEXT,
+                onNavigate = onNavigate,
             )
         }
     }
@@ -106,21 +113,14 @@ fun TextEditorScreen(
 
 @Composable
 private fun Header() {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-//        Text(
-//            text = stringResource(R.string.text_eyebrow),
-//            style = MaterialTheme.typography.labelSmall,
-//            color = TextScreenColors.Cyan,
-//            letterSpacing = 2.sp,
-//            fontWeight = FontWeight.SemiBold,
-//        )
-        Text(
-            text = stringResource(R.string.text_title),
-            style = MaterialTheme.typography.titleLarge,
-            color = TextScreenColors.TextPrimary,
-            fontWeight = FontWeight.Bold,
-        )
-    }
+    Text(
+        text = stringResource(R.string.text_title),
+        style = MaterialTheme.typography.titleLarge,
+        color = TextScreenColors.TextPrimary,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 /**
@@ -191,24 +191,51 @@ private fun MessageField(
     }
 }
 
-/** Aperçu : cadre de LEDs animées, message sur une ligne qui défile comme à l'affichage. */
+/**
+ * Aperçu : cadre de LEDs animées, message sur une ligne qui défile comme à l'affichage.
+ * Un appui sur l'aperçu affiche le message en plein écran.
+ */
 @Composable
 private fun PreviewSection(
     draft: String,
     textColor: Color,
     bgColor: Color,
+    enabled: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val shape = RoundedCornerShape(22.dp)
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        SectionLabel(stringResource(R.string.text_section_preview))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            //SectionLabel(stringResource(R.string.text_section_preview))
+            if (enabled) {
+                Text(
+                    text = stringResource(R.string.text_preview_hint),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextScreenColors.Cyan,
+                )
+            }
+        }
         LedFrame(
             contentColor = bgColor,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .clip(shape)
+                .clickable(
+                    enabled = enabled,
+                    onClickLabel = stringResource(R.string.text_show_full_screen),
+                    role = Role.Button,
+                    onClick = onClick,
+                ),
             cornerRadius = 22.dp,
             ledBand = 12.dp,
             ledSpacing = 15.dp,

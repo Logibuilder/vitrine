@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.feature.text.ui.display.TextDisplayScreen
 import com.example.vitrine.feature.text.ui.editor.TextEditorScreen
 import com.example.vitrine.feature.text.viewmodel.TextViewModel
@@ -16,6 +17,7 @@ import org.koin.androidx.compose.koinViewModel
  */
 @Composable
 fun TextScreen(
+    onNavigate: (AppDestination) -> Unit,
     viewModel: TextViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -35,6 +37,7 @@ fun TextScreen(
             onShow = viewModel::showDraft,
             onTextColor = viewModel::setTextColor,
             onBgColor = viewModel::setBgColor,
+            onNavigate = onNavigate,
         )
     }
 }
