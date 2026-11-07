@@ -11,18 +11,21 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 /**
- * À placer dans un écran d'affichage plein écran (texte géant, horloge…).
- * Tant que l'écran est affiché : paysage forcé, écran toujours allumé, barres système cachées.
+ * À placer dans un écran d'affichage plein écran (texte géant, horloge, lampe…).
+ * Tant que l'écran est affiché : écran toujours allumé, barres système cachées,
+ * et paysage forcé si [forceLandscape] (inutile pour la lampe, par exemple).
  * Tout est restauré en quittant l'écran, mais pas pendant une rotation
  * (l'activité est alors recréée et l'affichage continue).
  */
 @Composable
-fun FullScreenDisplayEffect() {
+fun FullScreenDisplayEffect(forceLandscape: Boolean = true) {
     val activity = LocalView.current.context as? Activity
 
-    DisposableEffect(activity) {
+    DisposableEffect(activity, forceLandscape) {
         val window = activity?.window
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        if (forceLandscape) {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        }
         window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window?.let { w ->
             WindowCompat.getInsetsController(w, w.decorView).apply {
@@ -33,7 +36,9 @@ fun FullScreenDisplayEffect() {
 
         onDispose {
             if (activity?.isChangingConfigurations != true) {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                if (forceLandscape) {
+                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                }
                 window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 window?.let { w ->
                     WindowCompat.getInsetsController(w, w.decorView)

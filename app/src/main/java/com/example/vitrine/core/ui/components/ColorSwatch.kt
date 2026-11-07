@@ -1,4 +1,4 @@
-package com.example.vitrine.feature.text.ui.editor
+package com.example.vitrine.core.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -24,7 +24,7 @@ import com.example.vitrine.ui.theme.VitrineShapes
 
 /** Pastille de couleur avec son libellé ; un anneau foncé indique la sélection. */
 @Composable
-internal fun ColorSwatch(
+fun ColorSwatch(
     label: String,
     color: Color,
     selected: Boolean,

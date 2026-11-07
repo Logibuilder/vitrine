@@ -9,8 +9,7 @@
     <!-- Fonctionnalités pas encore développées -->
     <string name="coming_soon">Bientôt disponible</string>
     <string name="clock_title">L\'heure, en très grand</string>
-    <string name="flashlight_title">Votre écran, en lampe</string>
-    <string name="flashlight_coming_soon">L\'écran devient une lumière réglable en couleur et en intensité.</string>
+    <string name="flashlight_title">La lumière, au bout des doigts</string>
     <string name="timer_title">Vos minuteurs</string>
     <string name="timer_coming_soon">Des minuteurs par tâche, qui continuent même écran éteint.</string>
 </resources>

@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
+import com.example.vitrine.core.ui.components.ColorSwatch
 import com.example.vitrine.core.ui.components.VitrineCard
 import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.MarqueeText

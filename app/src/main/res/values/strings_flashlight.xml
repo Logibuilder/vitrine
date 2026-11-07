@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Feature lampe (le titre flashlight_title est dans strings_menu.xml) -->
+    <string name="light_source_label">Source</string>
+    <string name="light_source_screen">Écran</string>
+    <string name="light_source_torch">Flash</string>
+
+    <string name="light_tap_hint">Touchez pour allumer</string>
+    <string name="light_turn_on_screen">Allumer l\'écran en lampe</string>
+    <string name="light_color_label">Couleur</string>
+    <string name="light_brightness_label">Intensité</string>
+    <string name="light_level">%1$d %%</string>
+
+    <string name="light_toggle_torch">Allumer ou éteindre le flash</string>
+    <string name="light_torch_on">Allumé</string>
+    <string name="light_torch_off">Éteint</string>
+
+    <!-- Noms des couleurs de lumière -->
+    <string name="light_white">Blanc</string>
+    <string name="light_warm">Chaud</string>
+    <string name="light_cool">Froid</string>
+    <string name="light_red">Rouge</string>
+</resources>

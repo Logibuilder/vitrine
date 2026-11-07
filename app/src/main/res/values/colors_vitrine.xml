@@ -34,6 +34,12 @@
     <color name="led_color_3">#FFE86F5C</color>
     <color name="led_color_4">#FF4C8DF6</color>
 
+    <!-- Couleurs de la lampe (lumière d'écran) -->
+    <color name="light_white">#FFFFFFFF</color>
+    <color name="light_warm">#FFFFD9A0</color>   <!-- blanc chaud, comme une ampoule -->
+    <color name="light_cool">#FFD6ECFF</color>   <!-- blanc froid, comme la lumière du jour -->
+    <color name="light_red">#FFFF2A1F</color>    <!-- préserve la vision de nuit -->
+
     <!-- Couleurs proposées pour le texte du message -->
     <color name="text_white">#FFFFFFFF</color>
     <color name="text_yellow">#FFFFFF00</color>
