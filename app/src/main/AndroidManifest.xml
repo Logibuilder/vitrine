@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Chronos : notification du temps qui défile (Android 13+) et retour après redémarrage -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Objectif de temps : alarme à l'heure exacte (Android 12+, l'utilisateur peut la refuser) -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -16,6 +22,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Vitrine"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -24,6 +31,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Boutons Pause / Arrêter de la notification des chronos -->
+        <receiver
+            android:name=".feature.timer.service.TimerActionReceiver"
+            android:exported="false" />
+
+        <!-- Alarme « objectif atteint » -->
+        <receiver
+            android:name=".feature.timer.service.GoalAlarmReceiver"
+            android:exported="false" />
+
+        <!-- Remet notifications et alarmes des chronos après un redémarrage ou une mise à jour -->
+        <receiver
+            android:name=".feature.timer.service.TimerBootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

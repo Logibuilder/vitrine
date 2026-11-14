@@ -47,7 +47,11 @@ object VitrineColors {
     val Accent: Color
         @Composable get() = themed(R.color.vitrine_light_accent, R.color.vitrine_dark_accent)
 
-    /** Ambre : attention, fonctionnalité à venir. */
+    /** Ambre : attention, en pause, objectif bientôt atteint. */
     val Warning: Color
         @Composable get() = themed(R.color.vitrine_light_warning, R.color.vitrine_dark_warning)
+
+    /** Rouge : objectif dépassé, action destructive (suppression). */
+    val Danger: Color
+        @Composable get() = themed(R.color.vitrine_light_danger, R.color.vitrine_dark_danger)
 }

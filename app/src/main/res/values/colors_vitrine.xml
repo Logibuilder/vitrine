@@ -15,6 +15,7 @@
     <color name="vitrine_light_text_muted">#FF8E8E93</color>
     <color name="vitrine_light_accent">#FF4CA34A</color>         <!-- vert : état actif -->
     <color name="vitrine_light_warning">#FFE3A43A</color>        <!-- ambre : attention -->
+    <color name="vitrine_light_danger">#FFE5484D</color>         <!-- rouge : objectif dépassé, suppression -->
 
     <!-- Mode sombre -->
     <color name="vitrine_dark_background">#FF0E0E10</color>
@@ -25,6 +26,7 @@
     <color name="vitrine_dark_text_muted">#FF8E8E93</color>
     <color name="vitrine_dark_accent">#FF5DBB5A</color>
     <color name="vitrine_dark_warning">#FFF0B44C</color>
+    <color name="vitrine_dark_danger">#FFFF6369</color>
 
     <!-- Guirlande de LEDs (l'aperçu utilise les couleurs de l'interface) -->
     <color name="led_base_display">#FF0A0A0A</color>       <!-- support (plein écran) -->

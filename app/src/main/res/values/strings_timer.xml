@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Feature chronos par tâche (le titre timer_title est dans strings_menu.xml) -->
+    <string name="timer_new_task_placeholder">Nouvelle tâche…</string>
+    <string name="timer_add_task">Ajouter la tâche</string>
+
+    <string name="timer_empty_status">Aucune tâche</string>
+    <string name="timer_empty_title">Créez votre première tâche</string>
+    <string name="timer_empty_body">Donnez-lui un nom, puis lancez son chrono. Il continue de tourner même application fermée.</string>
+
+    <string name="timer_running">En cours</string>
+    <string name="timer_paused">En pause</string>
+    <string name="timer_total">Total : %1$s</string>
+    <string name="timer_start">Lancer le chrono</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_stop">Arrêter</string>
+    <string name="timer_reset">Remettre à zéro</string>
+
+    <!-- Modification et objectif -->
+    <string name="timer_edit">Modifier la tâche</string>
+    <string name="timer_edit_title">Modifier la tâche</string>
+    <string name="timer_save">Enregistrer</string>
+    <string name="timer_goal_label">Objectif</string>
+    <string name="timer_goal_less">Réduire l\'objectif de 5 minutes</string>
+    <string name="timer_goal_more">Augmenter l\'objectif de 5 minutes</string>
+    <string name="timer_goal_caption">Objectif : %1$s</string>
+    <string name="timer_goal_remaining">Reste %1$s</string>
+    <string name="timer_goal_exceeded">Dépassé de %1$s</string>
+    <string name="timer_goal_reached_status">Objectif atteint</string>
+    <string name="timer_exact_alarm_hint">Android peut retarder l\'alarme de quelques minutes. Autorisez les alarmes exactes pour être prévenu à l\'heure.</string>
+    <string name="timer_exact_alarm_allow">Autoriser</string>
+    <string name="timer_delete_task">Supprimer la tâche</string>
+
+    <string name="timer_delete">Supprimer</string>
+    <string name="timer_delete_title">Supprimer « %1$s » ?</string>
+    <string name="timer_delete_body">La tâche, son chrono et tout son historique seront effacés.</string>
+    <string name="timer_cancel">Annuler</string>
+
+    <!-- Notification -->
+    <string name="timer_channel_name">Chronos en cours</string>
+    <string name="timer_channel_description">Affiche le temps des chronos qui tournent.</string>
+    <string name="timer_notification_running">Chrono en cours</string>
+    <string name="timer_goal_channel_name">Objectifs atteints</string>
+    <string name="timer_goal_channel_description">Sonne quand le chrono d\'une tâche atteint son objectif.</string>
+    <string name="timer_goal_reached_title">Objectif atteint</string>
+    <string name="timer_goal_reached_text">%1$s : %2$s</string>
+</resources>
