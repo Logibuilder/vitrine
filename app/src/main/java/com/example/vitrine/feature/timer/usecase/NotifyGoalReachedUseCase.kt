@@ -22,7 +22,7 @@ class NotifyGoalReachedUseCase(
 ) {
     suspend operator fun invoke(taskId: Long) {
         val task = tasks.getTask(taskId) ?: return
-        val goal = task.goalMillis ?: return
+        val goal = task.goalMillis
         val state = timers.getState(taskId)?.takeIf { it.isRunning } ?: return
 
         val now = clock.now()

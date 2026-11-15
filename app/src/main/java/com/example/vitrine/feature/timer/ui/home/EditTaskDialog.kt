@@ -1,6 +1,5 @@
 package com.example.vitrine.feature.timer.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -47,91 +44,62 @@ private const val MINUTE = 60_000L
 private const val GOAL_STEP = 5 * MINUTE
 private const val GOAL_MIN = 5 * MINUTE
 private const val GOAL_MAX = 10 * 60 * MINUTE
-private const val GOAL_DEFAULT = 25 * MINUTE
 private val GOAL_PRESETS = listOf(15L, 25L, 45L, 60L).map { it * MINUTE }
 
 /**
- * Fenêtre de modification d'une tâche : nom, objectif (activé ou non, réglable de 5 en 5 minutes
- * ou par raccourcis), et accès à la suppression.
+ * Fenêtre d'une tâche : nom et objectif (réglable de 5 en 5 minutes ou par raccourcis).
+ * Sert à la création (« Nouvelle tâche » / « Créer ») et à la modification (« Modifier » / « Enregistrer »).
+ * Chaque tâche a un objectif ; la suppression se fait depuis la carte.
  *
+ * @param stateKey identifie ce qui est édité : les valeurs saisies sont gardées pendant une rotation.
  * @param exactAlarmAllowed faux si Android peut retarder l'alarme : on propose alors de l'autoriser.
  */
 @Composable
 fun EditTaskDialog(
-    taskId: Long,
+    stateKey: String,
+    title: String,
+    confirmLabel: String,
     initialName: String,
-    initialGoalMillis: Long?,
+    initialGoalMillis: Long,
     exactAlarmAllowed: Boolean,
     onAllowExactAlarm: () -> Unit,
-    onSave: (name: String, goalMillis: Long?) -> Unit,
-    onDeleteRequest: () -> Unit,
+    onSave: (name: String, goalMillis: Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
     // Valeurs en cours d'édition, gardées pendant une rotation
-    var name by rememberSaveable(taskId) { mutableStateOf(initialName) }
-    var hasGoal by rememberSaveable(taskId) { mutableStateOf(initialGoalMillis != null) }
-    var goal by rememberSaveable(taskId) { mutableLongStateOf(initialGoalMillis ?: GOAL_DEFAULT) }
+    var name by rememberSaveable(stateKey) { mutableStateOf(initialName) }
+    var goal by rememberSaveable(stateKey) { mutableLongStateOf(initialGoalMillis.coerceIn(GOAL_MIN, GOAL_MAX)) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = VitrineColors.Surface,
         titleContentColor = VitrineColors.TextPrimary,
-        title = { Text(stringResource(R.string.timer_edit_title)) },
+        title = { Text(title) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 NameField(name = name, onNameChange = { name = it.replace("\n", "").take(Task.MAX_NAME_LENGTH) })
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    SectionLabel(stringResource(R.string.timer_goal_label))
-                    Switch(
-                        checked = hasGoal,
-                        onCheckedChange = { hasGoal = it },
-                        colors = SwitchDefaults.colors(
-                            checkedTrackColor = VitrineColors.Accent,
-                            checkedThumbColor = VitrineColors.Surface,
-                            uncheckedTrackColor = VitrineColors.SurfaceMuted,
-                            uncheckedThumbColor = VitrineColors.TextMuted,
-                            uncheckedBorderColor = VitrineColors.Divider,
-                        ),
-                    )
-                }
-
-                AnimatedVisibility(visible = hasGoal) {
-                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        GoalStepper(goal = goal, onGoalChange = { goal = it })
-                        SegmentedControl(
-                            options = GOAL_PRESETS,
-                            selected = goal,
-                            onSelect = { goal = it },
-                            // Nombre de minutes seul : quatre choix doivent tenir dans la fenêtre
-                            label = { preset -> (preset / MINUTE).toString() },
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
-                        if (!exactAlarmAllowed) {
-                            ExactAlarmHint(onAllow = onAllowExactAlarm)
-                        }
-                    }
-                }
-
-                // Suppression : demande une confirmation dans une seconde fenêtre
-                TextButton(
-                    onClick = onDeleteRequest,
-                    modifier = Modifier.align(Alignment.Start),
-                ) {
-                    Text(stringResource(R.string.timer_delete_task), color = VitrineColors.Danger)
+                SectionLabel(stringResource(R.string.timer_goal_label))
+                GoalStepper(goal = goal, onGoalChange = { goal = it })
+                SegmentedControl(
+                    options = GOAL_PRESETS,
+                    selected = goal,
+                    onSelect = { goal = it },
+                    // Nombre de minutes seul : quatre choix doivent tenir dans la fenêtre
+                    label = { preset -> (preset / MINUTE).toString() },
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+                if (!exactAlarmAllowed) {
+                    ExactAlarmHint(onAllow = onAllowExactAlarm)
                 }
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(name, if (hasGoal) goal else null) },
+                onClick = { onSave(name, goal) },
                 enabled = name.isNotBlank(),
             ) {
-                Text(stringResource(R.string.timer_save), color = VitrineColors.Accent)
+                Text(confirmLabel, color = VitrineColors.Accent)
             }
         },
         dismissButton = {

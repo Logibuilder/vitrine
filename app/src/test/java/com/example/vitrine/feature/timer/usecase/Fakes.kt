@@ -23,12 +23,12 @@ class FakeTaskRepository : TaskRepository {
 
     override fun observeTasks(): Flow<List<Task>> = tasks
     override suspend fun getTask(id: Long): Task? = tasks.value.firstOrNull { it.id == id }
-    override suspend fun addTask(name: String, createdAt: Long): Long {
+    override suspend fun addTask(name: String, createdAt: Long, goalMillis: Long): Long {
         val id = nextId++
-        tasks.value = tasks.value + Task(id, name, createdAt)
+        tasks.value = tasks.value + Task(id, name, createdAt, goalMillis)
         return id
     }
-    override suspend fun updateTask(id: Long, name: String, goalMillis: Long?) {
+    override suspend fun updateTask(id: Long, name: String, goalMillis: Long) {
         tasks.value = tasks.value.map { if (it.id == id) it.copy(name = name, goalMillis = goalMillis) else it }
     }
     override suspend fun deleteTask(id: Long) {

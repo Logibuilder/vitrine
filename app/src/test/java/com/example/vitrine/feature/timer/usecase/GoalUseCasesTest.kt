@@ -67,10 +67,11 @@ class GoalUseCasesTest {
     }
 
     @Test
-    fun `sans objectif aucune alarme`() = runBlocking {
-        tasks.updateTask(taskId, "Révisions", null)
-        start(taskId)
-        assertTrue(alarms.alarms.isEmpty())
+    fun `une nouvelle tache a l'objectif par defaut de 25 min`() = runBlocking {
+        val id = AddTaskUseCase(tasks, clock)("Sport")!!
+        assertEquals(25 * minute, tasks.getTask(id)!!.goalMillis)
+        start(id)
+        assertEquals(clock.now() + 25 * minute, alarms.alarms[id])
     }
 
     @Test
@@ -92,10 +93,17 @@ class GoalUseCasesTest {
     }
 
     @Test
-    fun `retirer l'objectif annule l'alarme`() = runBlocking {
+    fun `reduire l'objectif sous le temps deja fait annule l'alarme`() = runBlocking {
         start(taskId)
-        update(taskId, "Révisions", null)
+        clock.time += 20 * minute
+        update(taskId, "Révisions", 10 * minute)
         assertNull(alarms.alarms[taskId])
+    }
+
+    @Test
+    fun `objectif nul ramene au minimum d'une minute`() = runBlocking {
+        update(taskId, "Révisions", 0)
+        assertEquals(minute, tasks.getTask(taskId)!!.goalMillis)
     }
 
     @Test
@@ -146,6 +154,20 @@ class GoalUseCasesTest {
         alarms.alarms.clear() // le redémarrage efface les alarmes
         ReconstructTimersUseCase(tasks, timers, notifier, alarms, clock)()
         assertEquals(clock.now() + 15 * minute, alarms.alarms[taskId])
+    }
+
+    @Test
+    fun `l'objectif choisi a la creation est garde et sert a l'alarme`() = runBlocking {
+        val id = AddTaskUseCase(tasks, clock)("Lecture", 45 * minute)!!
+        assertEquals(45 * minute, tasks.getTask(id)!!.goalMillis)
+        start(id)
+        assertEquals(clock.now() + 45 * minute, alarms.alarms[id])
+    }
+
+    @Test
+    fun `objectif nul a la creation ramene au minimum`() = runBlocking {
+        val id = AddTaskUseCase(tasks, clock)("Pause", 0)!!
+        assertEquals(minute, tasks.getTask(id)!!.goalMillis)
     }
 
     @Test

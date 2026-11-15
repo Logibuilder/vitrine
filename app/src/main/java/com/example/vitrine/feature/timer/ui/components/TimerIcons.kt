@@ -101,3 +101,24 @@ fun EditIcon(color: Color, modifier: Modifier = Modifier) {
         )
     }
 }
+
+/** Corbeille « supprimer » : couvercle, poignée et cuve aux coins arrondis. */
+@Composable
+fun TrashIcon(color: Color, modifier: Modifier = Modifier) {
+    Canvas(modifier) {
+        val w = size.width
+        val h = size.height
+        val stroke = size.minDimension * 0.12f
+        // Couvercle et poignée
+        drawLine(color, Offset(w * 0.14f, h * 0.24f), Offset(w * 0.86f, h * 0.24f), stroke, StrokeCap.Round)
+        drawLine(color, Offset(w * 0.38f, h * 0.10f), Offset(w * 0.62f, h * 0.10f), stroke, StrokeCap.Round)
+        // Cuve
+        drawRoundRect(
+            color = color,
+            topLeft = Offset(w * 0.24f, h * 0.34f),
+            size = Size(w * 0.52f, h * 0.58f),
+            cornerRadius = CornerRadius(w * 0.08f),
+            style = Stroke(width = stroke),
+        )
+    }
+}

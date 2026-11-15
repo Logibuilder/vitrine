@@ -20,7 +20,7 @@ abstract class TaskDao {
     abstract suspend fun insert(task: TaskEntity): Long
 
     @Query("UPDATE tasks SET name = :name, goalMillis = :goalMillis WHERE id = :id")
-    abstract suspend fun update(id: Long, name: String, goalMillis: Long?)
+    abstract suspend fun update(id: Long, name: String, goalMillis: Long)
 
     @Query("DELETE FROM timer_sessions WHERE taskId = :taskId")
     abstract suspend fun deleteSessions(taskId: Long)

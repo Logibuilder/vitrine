@@ -31,16 +31,16 @@ data class TaskTimerItem(
     /** Temps total passé sur la tâche, toutes sessions confondues. */
     val totalMillis: Long,
     val isRunning: Boolean,
-    /** Objectif de temps du chrono ; null s'il n'y en a pas. */
-    val goalMillis: Long? = null,
+    /** Objectif de temps du chrono (chaque tâche en a un). */
+    val goalMillis: Long = Task.DEFAULT_GOAL_MILLIS,
 ) {
     /** Vrai si le chrono n'est pas à zéro (en cours ou en pause) : on peut le remettre à zéro. */
     val canReset: Boolean get() = isRunning || currentMillis > 0
 
-    /** Avancement vers l'objectif (0 → 1, plus de 1 s'il est dépassé) ; null sans objectif. */
-    val goalProgress: Float? get() = goalProgress(currentMillis, goalMillis)
+    /** Avancement vers l'objectif : 0 → 1, plus de 1 s'il est dépassé. */
+    val goalProgress: Float get() = goalProgress(currentMillis, goalMillis)
 
-    val goalReached: Boolean get() = (goalProgress ?: 0f) >= 1f
+    val goalReached: Boolean get() = goalProgress >= 1f
 }
 
 data class TimerUiState(
@@ -92,11 +92,11 @@ class TimerViewModel(
         savedState[KEY_NEW_TASK_NAME] = value.replace("\n", "").take(Task.MAX_NAME_LENGTH)
     }
 
-    fun addTask() {
-        val name = newTaskName.value
+    /** Crée la tâche avec le nom et l'objectif choisis dans la fenêtre « Nouvelle tâche ». */
+    fun addTask(name: String, goalMillis: Long) {
         if (name.isBlank()) return
         savedState[KEY_NEW_TASK_NAME] = ""
-        viewModelScope.launch { addTaskUseCase(name) }
+        viewModelScope.launch { addTaskUseCase(name, goalMillis) }
     }
 
     /** Lance le chrono s'il est arrêté ou en pause, le met en pause s'il tourne. */
@@ -110,8 +110,8 @@ class TimerViewModel(
         viewModelScope.launch { stopTimer(taskId) }
     }
 
-    /** Nouveau nom et nouvel objectif (null = sans objectif). */
-    fun updateTask(taskId: Long, name: String, goalMillis: Long?) {
+    /** Nouveau nom et nouvel objectif. */
+    fun updateTask(taskId: Long, name: String, goalMillis: Long) {
         viewModelScope.launch { updateTaskUseCase(taskId, name, goalMillis) }
     }
 

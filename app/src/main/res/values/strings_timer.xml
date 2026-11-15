@@ -3,6 +3,8 @@
     <!-- Feature chronos par tâche (le titre timer_title est dans strings_menu.xml) -->
     <string name="timer_new_task_placeholder">Nouvelle tâche…</string>
     <string name="timer_add_task">Ajouter la tâche</string>
+    <string name="timer_new_task_title">Nouvelle tâche</string>
+    <string name="timer_create">Créer</string>
 
     <string name="timer_empty_status">Aucune tâche</string>
     <string name="timer_empty_title">Créez votre première tâche</string>

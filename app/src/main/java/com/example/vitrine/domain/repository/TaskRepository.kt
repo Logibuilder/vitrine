@@ -10,11 +10,11 @@ interface TaskRepository {
 
     suspend fun getTask(id: Long): Task?
 
-    /** Crée une tâche et renvoie son identifiant. */
-    suspend fun addTask(name: String, createdAt: Long): Long
+    /** Crée une tâche avec son objectif et renvoie son identifiant. */
+    suspend fun addTask(name: String, createdAt: Long, goalMillis: Long = Task.DEFAULT_GOAL_MILLIS): Long
 
-    /** Change le nom et l'objectif d'une tâche (objectif null = aucun). */
-    suspend fun updateTask(id: Long, name: String, goalMillis: Long?)
+    /** Change le nom et l'objectif d'une tâche. */
+    suspend fun updateTask(id: Long, name: String, goalMillis: Long)
 
     /** Supprime la tâche avec son chrono et tout son historique. */
     suspend fun deleteTask(id: Long)

@@ -92,7 +92,7 @@ class AndroidTimerNotifier(
     @SuppressLint("MissingPermission") // vérifiée juste au-dessus avec canNotify()
     override fun showGoalReached(task: Task) {
         if (!canNotify()) return
-        val goal = task.goalMillis ?: return
+        val goal = task.goalMillis
 
         val notification = NotificationCompat.Builder(context, GOAL_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_timer)

@@ -100,6 +100,16 @@ fun TaskItem(
                 )
             }
 
+
+
+            SmallButton(stringResource(R.string.timer_edit), onEdit) {
+                EditIcon(VitrineColors.TextPrimary, Modifier.size(16.dp))
+            }
+
+            SmallButton(stringResource(R.string.timer_delete_task), onDelete) {
+                TrashIcon(VitrineColors.Danger, Modifier.size(16.dp))
+            }
+
             AnimatedVisibility(
                 visible = item.canReset,
                 enter = fadeIn() + scaleIn(),
@@ -108,14 +118,6 @@ fun TaskItem(
                 SmallButton(stringResource(R.string.timer_reset), onReset) {
                     StopIcon(VitrineColors.TextPrimary, Modifier.size(16.dp))
                 }
-            }
-
-            SmallButton(stringResource(R.string.timer_edit), onEdit) {
-                EditIcon(VitrineColors.TextPrimary, Modifier.size(16.dp))
-            }
-
-            SmallButton(stringResource(R.string.timer_delete_task), onDelete) {
-                TrashIcon(VitrineColors.Danger, Modifier.size(16.dp))
             }
 
             // Vert pour lancer, neutre pour mettre en pause

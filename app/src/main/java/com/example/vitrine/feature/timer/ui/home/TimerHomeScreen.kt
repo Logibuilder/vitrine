@@ -37,6 +37,7 @@ import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.core.ui.components.StatusDot
 import com.example.vitrine.core.ui.components.VitrineCard
 import com.example.vitrine.core.ui.components.VitrineScreen
+import com.example.vitrine.domain.model.Task
 import com.example.vitrine.feature.timer.ui.TaskItem
 import com.example.vitrine.feature.timer.ui.components.PlusIcon
 import com.example.vitrine.feature.timer.ui.components.RoundIconButton
@@ -53,16 +54,18 @@ import com.example.vitrine.ui.theme.VitrineDimens
 fun TimerHomeScreen(
     state: TimerUiState,
     onNewTaskNameChange: (String) -> Unit,
-    onAddTask: () -> Unit,
+    onAddTask: (name: String, goalMillis: Long) -> Unit,
     onToggle: (TaskTimerItem) -> Unit,
     onReset: (Long) -> Unit,
-    onUpdate: (taskId: Long, name: String, goalMillis: Long?) -> Unit,
+    onUpdate: (taskId: Long, name: String, goalMillis: Long) -> Unit,
     onDelete: (Long) -> Unit,
     exactAlarmAllowed: Boolean,
     onAllowExactAlarm: () -> Unit,
     onNavigate: (AppDestination) -> Unit,
 ) {
-    // Tâche en cours de modification, puis tâche dont on confirme la suppression
+    // Création en cours (fenêtre « Nouvelle tâche »), tâche en cours de modification,
+    // puis tâche dont on confirme la suppression
+    var creating by rememberSaveable { mutableStateOf(false) }
     var editingId by rememberSaveable { mutableStateOf<Long?>(null) }
     var pendingDeleteId by rememberSaveable { mutableStateOf<Long?>(null) }
 
@@ -75,7 +78,7 @@ fun TimerHomeScreen(
             name = state.newTaskName,
             canAdd = state.canAddTask,
             onNameChange = onNewTaskNameChange,
-            onAdd = onAddTask,
+            onAdd = { creating = true },
         )
 
         if (!state.isLoading && state.items.isEmpty()) {
@@ -93,6 +96,7 @@ fun TimerHomeScreen(
                         onToggle = { onToggle(item) },
                         onReset = { onReset(item.id) },
                         onEdit = { editingId = item.id },
+                        onDelete = { pendingDeleteId = item.id },
                         modifier = Modifier.animateItem(),
                     )
                 }
@@ -100,10 +104,30 @@ fun TimerHomeScreen(
         }
     }
 
+    // Nouvelle tâche : on choisit son objectif tout de suite, le nom tapé est déjà rempli
+    if (creating) {
+        EditTaskDialog(
+            stateKey = "new",
+            title = stringResource(R.string.timer_new_task_title),
+            confirmLabel = stringResource(R.string.timer_create),
+            initialName = state.newTaskName.trim(),
+            initialGoalMillis = Task.DEFAULT_GOAL_MILLIS,
+            exactAlarmAllowed = exactAlarmAllowed,
+            onAllowExactAlarm = onAllowExactAlarm,
+            onSave = { name, goal ->
+                onAddTask(name, goal)
+                creating = false
+            },
+            onDismiss = { creating = false },
+        )
+    }
+
     val editing = state.items.firstOrNull { it.id == editingId }
     if (editing != null) {
         EditTaskDialog(
-            taskId = editing.id,
+            stateKey = "edit-${editing.id}",
+            title = stringResource(R.string.timer_edit_title),
+            confirmLabel = stringResource(R.string.timer_save),
             initialName = editing.name,
             initialGoalMillis = editing.goalMillis,
             exactAlarmAllowed = exactAlarmAllowed,
@@ -111,10 +135,6 @@ fun TimerHomeScreen(
             onSave = { name, goal ->
                 onUpdate(editing.id, name, goal)
                 editingId = null
-            },
-            onDeleteRequest = {
-                editingId = null
-                pendingDeleteId = editing.id
             },
             onDismiss = { editingId = null },
         )
@@ -133,7 +153,10 @@ fun TimerHomeScreen(
     }
 }
 
-/** Champ « Nouvelle tâche » et bouton +. La touche Terminer du clavier ajoute aussi la tâche. */
+/**
+ * Champ « Nouvelle tâche » et bouton + : ils ouvrent la fenêtre de création, où l'on règle l'objectif.
+ * La touche Terminer du clavier fait de même.
+ */
 @Composable
 private fun NewTaskCard(
     name: String,
@@ -147,8 +170,7 @@ private fun NewTaskCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(Modifier.weight(1f)) {
-                BasicTextField(/** Aucune tâche pour l'instant : on explique comment commencer. */
-
+                BasicTextField(
                     value = name,
                     onValueChange = onNameChange,
                     singleLine = true,
@@ -190,7 +212,7 @@ private fun NewTaskCard(
 @Composable
 private fun EmptyCard(modifier: Modifier = Modifier) {
     VitrineCard(modifier = modifier) {
-        StatusDot(text = stringResource(R.string.timer_empty_status), color = VitrineColors.Warning)
+//        StatusDot(text = stringResource(R.string.timer_empty_status), color = VitrineColors.Warning)
         Spacer(Modifier.height(8.dp))
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
@@ -198,11 +220,11 @@ private fun EmptyCard(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineMedium,
                 color = VitrineColors.TextPrimary,
             )
-            Text(
-                text = stringResource(R.string.timer_empty_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = VitrineColors.TextMuted,
-            )
+//            Text(
+//                text = stringResource(R.string.timer_empty_body),
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = VitrineColors.TextMuted,
+//            )
         }
     }
 }

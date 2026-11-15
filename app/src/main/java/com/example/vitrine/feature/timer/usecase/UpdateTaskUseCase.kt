@@ -9,9 +9,9 @@ import com.example.vitrine.domain.repository.TaskRepository
 import com.example.vitrine.domain.repository.TimerRepository
 
 /**
- * Modifie le nom et l'objectif d'une tâche.
+ * Modifie le nom et l'objectif d'une tâche (objectif d'au moins 1 minute).
  * Si son chrono tourne, la notification prend le nouveau nom et l'alarme suit le nouvel objectif
- * (reprogrammée, ou annulée s'il n'y a plus d'objectif ou s'il est déjà dépassé).
+ * (reprogrammée, ou annulée s'il est déjà dépassé).
  */
 class UpdateTaskUseCase(
     private val tasks: TaskRepository,
@@ -20,10 +20,10 @@ class UpdateTaskUseCase(
     private val goalAlarm: GoalAlarmScheduler,
     private val clock: Clock,
 ) {
-    suspend operator fun invoke(taskId: Long, name: String, goalMillis: Long?) {
+    suspend operator fun invoke(taskId: Long, name: String, goalMillis: Long) {
         val trimmed = name.trim().take(Task.MAX_NAME_LENGTH)
         if (trimmed.isEmpty()) return
-        val goal = goalMillis?.takeIf { it > 0 }
+        val goal = goalMillis.coerceAtLeast(Task.MIN_GOAL_MILLIS)
 
         tasks.updateTask(taskId, trimmed, goal)
 

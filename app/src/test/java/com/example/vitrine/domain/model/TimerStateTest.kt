@@ -30,9 +30,9 @@ class TimerStateTest {
 
     @Test
     fun `avancement vers l'objectif`() {
-        assertEquals(null, goalProgress(10_000, null))
-        assertEquals(0.5f, goalProgress(30_000, 60_000)!!, 0.0001f)
-        assertEquals(1.5f, goalProgress(90_000, 60_000)!!, 0.0001f)
+        assertEquals(0.5f, goalProgress(30_000, 60_000), 0.0001f)
+        assertEquals(1.5f, goalProgress(90_000, 60_000), 0.0001f)
+        assertEquals(0f, goalProgress(-5_000, 60_000), 0.0001f)
     }
 
     @Test
@@ -41,6 +41,5 @@ class TimerStateTest {
         assertEquals(40_000L, millisUntilGoal(60_000, running, now = 110_000))
         assertEquals(null, millisUntilGoal(60_000, running.copy(runningSince = null), now = 110_000))
         assertEquals(null, millisUntilGoal(15_000, running, now = 110_000)) // déjà atteint
-        assertEquals(null, millisUntilGoal(null, running, now = 110_000))
     }
 }
