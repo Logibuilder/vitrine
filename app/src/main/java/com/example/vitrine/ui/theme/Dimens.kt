@@ -6,22 +6,22 @@ import androidx.compose.ui.unit.dp
 /** Espacements et formes communs à tous les écrans. */
 object VitrineDimens {
     /** Marge horizontale des écrans. */
-    val ScreenPaddingH = 16.dp
+    val ScreenPaddingH = 20.dp
 
     /** Marge verticale des écrans. */
     val ScreenPaddingV = 12.dp
 
     /** Espace entre deux cartes. */
-    val SectionGap = 10.dp
+    val SectionGap = 12.dp
 
     /** Espace entre le libellé d'une carte et son contenu. */
     val LabelGap = 8.dp
 
-    val CardPadding = 16.dp
+    val CardPadding = 18.dp
 
-    val CardRadius = 22.dp
+    val CardRadius = 28.dp
     val MenuRadius = 22.dp
-    val ControlRadius = 14.dp
+    val ControlRadius = 16.dp
 }
 
 object VitrineShapes {

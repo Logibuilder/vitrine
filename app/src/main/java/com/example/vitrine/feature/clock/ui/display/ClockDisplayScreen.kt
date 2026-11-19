@@ -13,8 +13,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.example.vitrine.R
 import com.example.vitrine.core.ui.components.FullScreenDisplayEffect
-import com.example.vitrine.core.ui.components.LedFrame
-import com.example.vitrine.core.ui.components.LedFrameDefaults
 import com.example.vitrine.core.ui.modifier.rotate90
 import com.example.vitrine.feature.clock.ui.components.AnalogClock
 import com.example.vitrine.feature.clock.ui.components.AnalogClockColors
@@ -23,8 +21,7 @@ import com.example.vitrine.feature.clock.usecase.ClockTime
 import com.example.vitrine.feature.clock.viewmodel.ClockStyle
 
 /**
- * Horloge plein écran : paysage, écran toujours allumé, guirlande de LEDs sur les bords,
- * comme l'affichage du texte géant. Un appui n'importe où ramène à l'écran horloge.
+ * Horloge plein écran : paysage, écran toujours allumé, fond noir uni. Un appui n'importe où ramène à l'écran horloge.
  */
 @Composable
 fun ClockDisplayScreen(
@@ -38,18 +35,11 @@ fun ClockDisplayScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LedFrameDefaults.displayBaseColor())
+            .background(colorResource(R.color.bg_black))
             .clickable(onClick = onExit),
     ) {
-        LedFrame(
-            contentColor = colorResource(R.color.bg_black),
-            modifier = Modifier.fillMaxSize(),
-            baseColor = LedFrameDefaults.displayBaseColor(),
-            offColor = LedFrameDefaults.displayOffColor(),
-            cornerRadius = 28.dp,
-            ledBand = 20.dp,
-            ledSpacing = 24.dp,
-        ) {
+        // Fond noir uni, sans LEDs : rien ne distrait de l'heure
+        Box(Modifier.fillMaxSize()) {
             BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxSize()

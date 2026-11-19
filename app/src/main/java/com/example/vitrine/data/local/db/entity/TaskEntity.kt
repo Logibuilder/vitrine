@@ -1,5 +1,6 @@
 package com.example.vitrine.data.local.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.vitrine.domain.model.Task
@@ -14,6 +15,12 @@ data class TaskEntity(
      * pour les tâches créées avant : elles prennent alors l'objectif par défaut.
      */
     val goalMillis: Long? = Task.DEFAULT_GOAL_MILLIS,
+    /**
+     * Rang de la tâche dans la liste (1 = en haut). Ajouté en version 3 de la base
+     * (voir AppDatabase.MIGRATION_2_3). La valeur par défaut doit être la même ici et dans la migration.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val position: Long = 0L,
 )
 
 fun TaskEntity.toDomain() = Task(

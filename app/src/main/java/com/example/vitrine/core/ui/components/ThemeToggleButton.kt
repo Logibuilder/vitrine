@@ -3,6 +3,7 @@ package com.example.vitrine.core.ui.components
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -46,9 +47,10 @@ fun ThemeToggleButton(
 
     Box(
         modifier = modifier
-            .size(40.dp)
+            .size(44.dp)
             .clip(CircleShape)
             .background(VitrineColors.Surface)
+            .border(1.dp, VitrineColors.Divider, CircleShape)
             .clickable(role = Role.Button, onClick = onClick)
             .semantics {
                 contentDescription = actionLabel

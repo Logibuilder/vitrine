@@ -43,7 +43,18 @@ object VitrineColors {
     val TextMuted: Color
         @Composable get() = themed(R.color.vitrine_light_text_muted, R.color.vitrine_dark_text_muted)
 
-    /** Vert : état actif, curseur, actions. */
+    /**
+     * Encre : le contraste maximal (presque noir en clair, ivoire en sombre).
+     * Réservée à l'élément sélectionné et à l'action principale d'un écran.
+     */
+    val Ink: Color
+        @Composable get() = themed(R.color.vitrine_light_ink, R.color.vitrine_dark_ink)
+
+    /** Texte et icônes posés sur [Ink]. */
+    val OnInk: Color
+        @Composable get() = themed(R.color.vitrine_light_on_ink, R.color.vitrine_dark_on_ink)
+
+    /** Émeraude : état actif, curseur, progression. Utilisée avec parcimonie. */
     val Accent: Color
         @Composable get() = themed(R.color.vitrine_light_accent, R.color.vitrine_dark_accent)
 

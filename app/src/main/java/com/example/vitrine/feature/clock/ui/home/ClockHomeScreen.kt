@@ -24,7 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
+import com.example.vitrine.core.ui.components.CardDivider
 import com.example.vitrine.core.ui.components.SectionLabel
+import com.example.vitrine.core.ui.components.SettingRow
 import com.example.vitrine.core.ui.components.SegmentedControl
 import com.example.vitrine.core.ui.components.StatusDot
 import com.example.vitrine.core.ui.components.VitrineCard
@@ -130,7 +132,7 @@ fun ClockHomeScreen(
                     },
                 )
             }
-            Spacer(Modifier.height(VitrineDimens.SectionGap))
+            CardDivider()
 
             // Le format 12/24 h ne concerne que l'affichage en chiffres
             AnimatedVisibility(
@@ -149,7 +151,7 @@ fun ClockHomeScreen(
                             },
                         )
                     }
-                    Spacer(Modifier.height(VitrineDimens.SectionGap))
+                    CardDivider()
                 }
             }
             SettingRow(label = stringResource(R.string.clock_seconds_label)) {
@@ -163,21 +165,5 @@ fun ClockHomeScreen(
                 )
             }
         }
-    }
-}
-
-/** Réglage sur une ligne : libellé à gauche, choix à droite. */
-@Composable
-private fun SettingRow(
-    label: String,
-    control: @Composable () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        SectionLabel(label)
-        control()
     }
 }

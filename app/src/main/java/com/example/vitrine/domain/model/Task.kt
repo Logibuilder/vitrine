@@ -58,3 +58,24 @@ fun millisUntilGoal(goalMillis: Long, state: TimerState, now: Long): Long? {
 /** Avancement vers l'objectif : 0 au départ, 1 à l'objectif, plus de 1 s'il est dépassé. */
 fun goalProgress(currentMillis: Long, goalMillis: Long): Float =
     currentMillis.coerceAtLeast(0L).toFloat() / goalMillis.coerceAtLeast(Task.MIN_GOAL_MILLIS)
+
+/**
+ * Ordre obtenu en déplaçant [fromId] à la place de [toId] (les éléments entre les deux se décalent).
+ * Renvoie la liste inchangée si l'un des deux identifiants est absent.
+ */
+fun List<Long>.moved(fromId: Long, toId: Long): List<Long> {
+    val from = indexOf(fromId)
+    val to = indexOf(toId)
+    if (from < 0 || to < 0 || from == to) return this
+    return toMutableList().apply { add(to, removeAt(from)) }
+}
+
+/**
+ * Applique un ordre voulu à une liste : les éléments connus de [order] d'abord, dans cet ordre ;
+ * les autres (nouvelles tâches) ensuite, dans leur ordre d'origine.
+ */
+fun <T> List<T>.orderedBy(order: List<Long>, id: (T) -> Long): List<T> {
+    if (order.isEmpty()) return this
+    val rank = order.withIndex().associate { (index, value) -> value to index }
+    return sortedBy { rank[id(it)] ?: Int.MAX_VALUE } // tri stable
+}

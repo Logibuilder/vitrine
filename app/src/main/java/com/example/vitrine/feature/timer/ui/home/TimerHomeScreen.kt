@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -45,6 +48,8 @@ import com.example.vitrine.feature.timer.viewmodel.TaskTimerItem
 import com.example.vitrine.feature.timer.viewmodel.TimerUiState
 import com.example.vitrine.ui.theme.VitrineColors
 import com.example.vitrine.ui.theme.VitrineDimens
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 /**
  * Écran des chronos : ajout d'une tâche en haut, liste des tâches et de leurs chronos.
@@ -59,6 +64,8 @@ fun TimerHomeScreen(
     onReset: (Long) -> Unit,
     onUpdate: (taskId: Long, name: String, goalMillis: Long) -> Unit,
     onDelete: (Long) -> Unit,
+    onMoveTask: (fromId: Long, toId: Long) -> Unit,
+    onTaskDragEnd: () -> Unit,
     exactAlarmAllowed: Boolean,
     onAllowExactAlarm: () -> Unit,
     onNavigate: (AppDestination) -> Unit,
@@ -84,21 +91,38 @@ fun TimerHomeScreen(
         if (!state.isLoading && state.items.isEmpty()) {
             EmptyCard(Modifier.weight(1f))
         } else {
+            // Glisser-déposer : appui long sur une carte, puis on la fait glisser à sa nouvelle place.
+            // Les clés des éléments sont les identifiants des tâches.
+            val haptics = LocalHapticFeedback.current
+            val listState = rememberLazyListState()
+            val reorderState = rememberReorderableLazyListState(listState) { from, to ->
+                onMoveTask(from.key as Long, to.key as Long)
+            }
+
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(VitrineDimens.SectionGap),
             ) {
                 items(state.items, key = { it.id }) { item ->
-                    TaskItem(
-                        item = item,
-                        onToggle = { onToggle(item) },
-                        onReset = { onReset(item.id) },
-                        onEdit = { editingId = item.id },
-                        onDelete = { pendingDeleteId = item.id },
-                        modifier = Modifier.animateItem(),
-                    )
+                    ReorderableItem(reorderState, key = item.id) { isDragging ->
+                        TaskItem(
+                            item = item,
+                            onToggle = { onToggle(item) },
+                            onReset = { onReset(item.id) },
+                            onEdit = { editingId = item.id },
+                            onDelete = { pendingDeleteId = item.id },
+                            isDragging = isDragging,
+                            modifier = Modifier.longPressDraggableHandle(
+                                onDragStarted = {
+                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                },
+                                onDragStopped = { onTaskDragEnd() },
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -197,12 +221,12 @@ private fun NewTaskCard(
             Spacer(Modifier.width(12.dp))
             RoundIconButton(
                 contentDescription = stringResource(R.string.timer_add_task),
-                background = VitrineColors.Accent,
+                background = VitrineColors.Ink,
                 size = 40.dp,
                 enabled = canAdd,
                 onClick = onAdd,
             ) {
-                PlusIcon(VitrineColors.Surface, Modifier.size(18.dp))
+                PlusIcon(VitrineColors.OnInk, Modifier.size(18.dp))
             }
         }
     }

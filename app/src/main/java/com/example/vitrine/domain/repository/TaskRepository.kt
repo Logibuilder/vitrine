@@ -16,6 +16,9 @@ interface TaskRepository {
     /** Change le nom et l'objectif d'une tâche. */
     suspend fun updateTask(id: Long, name: String, goalMillis: Long)
 
+    /** Enregistre l'ordre des tâches : [orderedIds] de haut en bas. */
+    suspend fun reorderTasks(orderedIds: List<Long>)
+
     /** Supprime la tâche avec son chrono et tout son historique. */
     suspend fun deleteTask(id: Long)
 }

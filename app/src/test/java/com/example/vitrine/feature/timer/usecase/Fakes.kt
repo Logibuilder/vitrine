@@ -31,6 +31,10 @@ class FakeTaskRepository : TaskRepository {
     override suspend fun updateTask(id: Long, name: String, goalMillis: Long) {
         tasks.value = tasks.value.map { if (it.id == id) it.copy(name = name, goalMillis = goalMillis) else it }
     }
+    override suspend fun reorderTasks(orderedIds: List<Long>) {
+        val rank = orderedIds.withIndex().associate { (index, id) -> id to index }
+        tasks.value = tasks.value.sortedBy { rank[it.id] ?: Int.MAX_VALUE }
+    }
     override suspend fun deleteTask(id: Long) {
         tasks.value = tasks.value.filterNot { it.id == id }
     }

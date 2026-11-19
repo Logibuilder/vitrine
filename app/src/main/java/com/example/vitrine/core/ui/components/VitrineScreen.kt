@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,9 +29,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.ui.theme.LocalThemeController
 import com.example.vitrine.ui.theme.VitrineColors
@@ -38,7 +41,7 @@ import com.example.vitrine.ui.theme.VitrineDimens
 
 /**
  * Gabarit commun à tous les écrans de l'application :
- * fond gris clair, titre centré en haut, contenu au milieu, menu des fonctionnalités en bas.
+ * fond ivoire (ou noir profond), grand titre en haut, contenu au milieu, menu des fonctionnalités en bas.
  *
  * Le contenu reçoit un [ColumnScope] : un bloc avec `Modifier.weight(1f)` prend la place restante,
  * ce qui permet de tout faire tenir sur un seul écran.
@@ -79,7 +82,7 @@ fun VitrineScreen(
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
             ) {
-                ScreenHeader(title)
+                ScreenHeader(eyebrow = stringResource(current.label), title = title)
             }
 
             Column(
@@ -103,33 +106,49 @@ fun VitrineScreen(
 }
 
 /**
- * En-tête : titre centré et, à droite, le bouton de thème (comme le bouton rond « … » d'une barre d'app).
+ * En-tête : à gauche, le nom de la fonctionnalité en petites capitales puis le grand titre ;
+ * à droite, le bouton de thème.
  * Le bouton n'apparaît que si un [LocalThemeController] est fourni (pas dans les aperçus).
  */
 @Composable
-private fun ScreenHeader(title: String) {
+private fun ScreenHeader(
+    eyebrow: String,
+    title: String,
+) {
     val themeController = LocalThemeController.current
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp),
-        contentAlignment = Alignment.Center,
+            .padding(top = 4.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Marge des deux côtés : le titre reste centré et ne passe jamais sous le bouton
-        ScreenTitle(title, modifier = Modifier.padding(horizontal = 48.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = eyebrow.uppercase(),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.6.sp,
+                color = VitrineColors.Accent,
+                maxLines = 1,
+            )
+            ScreenTitle(title)
+        }
 
         if (themeController != null) {
             ThemeToggleButton(
                 isDark = themeController.isDark,
                 onClick = themeController.onToggle,
-                modifier = Modifier.align(Alignment.CenterEnd),
             )
         }
     }
 }
 
-/** Titre d'écran, centré. */
+/** Grand titre d'écran, aligné à gauche (deux lignes au plus). */
 @Composable
 fun ScreenTitle(
     text: String,
@@ -137,10 +156,9 @@ fun ScreenTitle(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.headlineSmall,
         color = VitrineColors.TextPrimary,
-        textAlign = TextAlign.Center,
-        maxLines = 1,
+        maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier.fillMaxWidth(),
     )

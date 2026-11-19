@@ -1,11 +1,11 @@
 package com.example.vitrine.feature.timer.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,11 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,7 +46,7 @@ import com.example.vitrine.ui.theme.VitrineColors
  *   [remise à zéro] [modifier] [supprimer] [lecture / pause] ;
  * - en bas : barre de progression vers l'objectif, du vert au rouge
  *   (c'est le seul élément coloré selon l'avancement).
- * Un appui long ouvre aussi la modification.
+ * Le glisser-déposer (appui long) est branché par l'écran, via [modifier].
  */
 @Composable
 fun TaskItem(
@@ -57,17 +56,16 @@ fun TaskItem(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    isDragging: Boolean = false,
 ) {
-    val haptics = LocalHapticFeedback.current
     val progress = item.goalProgress
-
+    // La carte se soulève légèrement pendant qu'on la déplace
+    val scale by animateFloatAsState(if (isDragging) 1.03f else 1f, label = "drag-scale")
 
     VitrineCard(
-        modifier = modifier.pointerInput(item.id) {
-            detectTapGestures(onLongPress = {
-                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                onEdit()
-            })
+        modifier = modifier.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
         },
     ) {
         Header(item)
@@ -120,17 +118,17 @@ fun TaskItem(
                 }
             }
 
-            // Vert pour lancer, neutre pour mettre en pause
+            // Encre pour lancer (action principale), neutre pour mettre en pause
             RoundIconButton(
                 contentDescription = stringResource(if (item.isRunning) R.string.timer_pause else R.string.timer_start),
-                background = if (item.isRunning) VitrineColors.SurfaceMuted else VitrineColors.Accent,
+                background = if (item.isRunning) VitrineColors.SurfaceMuted else VitrineColors.Ink,
                 size = 52.dp,
                 onClick = onToggle,
             ) {
                 if (item.isRunning) {
                     PauseIcon(VitrineColors.TextPrimary, Modifier.size(22.dp))
                 } else {
-                    PlayIcon(VitrineColors.Surface, Modifier.size(22.dp))
+                    PlayIcon(VitrineColors.OnInk, Modifier.size(22.dp))
                 }
             }
         }

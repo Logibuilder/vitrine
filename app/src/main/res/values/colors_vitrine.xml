@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--
-        Interface, design plat. Deux palettes : claire et sombre.
+        Interface premium. Deux palettes : claire et sombre.
         VitrineColors choisit la bonne selon le thème actif (automatique, clair ou sombre),
         ce qui permet de forcer un thème différent de celui du téléphone.
     -->
 
-    <!-- Mode clair -->
-    <color name="vitrine_light_background">#FFF1F1F1</color>     <!-- fond des écrans -->
+    <!-- Mode clair : ivoire chaud, encre, émeraude -->
+    <color name="vitrine_light_background">#FFF5F3EE</color>     <!-- fond des écrans -->
     <color name="vitrine_light_surface">#FFFFFFFF</color>        <!-- cartes, menu -->
-    <color name="vitrine_light_surface_muted">#FFF0F0F0</color>  <!-- élément sélectionné -->
-    <color name="vitrine_light_divider">#FFE6E6E6</color>        <!-- contours discrets, LEDs éteintes -->
-    <color name="vitrine_light_text_primary">#FF111111</color>
-    <color name="vitrine_light_text_muted">#FF8E8E93</color>
-    <color name="vitrine_light_accent">#FF4CA34A</color>         <!-- vert : état actif -->
-    <color name="vitrine_light_warning">#FFE3A43A</color>        <!-- ambre : attention -->
-    <color name="vitrine_light_danger">#FFE5484D</color>         <!-- rouge : objectif dépassé, suppression -->
+    <color name="vitrine_light_surface_muted">#FFEFECE5</color>  <!-- boutons secondaires, pistes -->
+    <color name="vitrine_light_divider">#FFE5E1D8</color>        <!-- filets, LEDs éteintes -->
+    <color name="vitrine_light_text_primary">#FF16181C</color>
+    <color name="vitrine_light_text_muted">#FF7D7F85</color>
+    <color name="vitrine_light_ink">#FF16181C</color>            <!-- élément sélectionné, action principale -->
+    <color name="vitrine_light_on_ink">#FFFFFFFF</color>         <!-- texte et icônes sur l'encre -->
+    <color name="vitrine_light_accent">#FF17805C</color>         <!-- émeraude : état actif -->
+    <color name="vitrine_light_warning">#FFC98A1B</color>        <!-- or : attention, en pause -->
+    <color name="vitrine_light_danger">#FFD13F44</color>         <!-- rouge : objectif dépassé, suppression -->
 
-    <!-- Mode sombre -->
-    <color name="vitrine_dark_background">#FF0E0E10</color>
-    <color name="vitrine_dark_surface">#FF1C1C1E</color>
-    <color name="vitrine_dark_surface_muted">#FF2C2C2E</color>
-    <color name="vitrine_dark_divider">#FF3A3A3C</color>
-    <color name="vitrine_dark_text_primary">#FFF5F5F7</color>
-    <color name="vitrine_dark_text_muted">#FF8E8E93</color>
-    <color name="vitrine_dark_accent">#FF5DBB5A</color>
-    <color name="vitrine_dark_warning">#FFF0B44C</color>
-    <color name="vitrine_dark_danger">#FFFF6369</color>
+    <!-- Mode sombre : noir profond, ivoire, menthe -->
+    <color name="vitrine_dark_background">#FF0B0C0E</color>
+    <color name="vitrine_dark_surface">#FF15171A</color>
+    <color name="vitrine_dark_surface_muted">#FF1F2226</color>
+    <color name="vitrine_dark_divider">#FF2B2E33</color>
+    <color name="vitrine_dark_text_primary">#FFF2EFE8</color>
+    <color name="vitrine_dark_text_muted">#FF8C8F96</color>
+    <color name="vitrine_dark_ink">#FFF2EFE8</color>
+    <color name="vitrine_dark_on_ink">#FF0B0C0E</color>
+    <color name="vitrine_dark_accent">#FF4FD1A1</color>
+    <color name="vitrine_dark_warning">#FFE9B55A</color>
+    <color name="vitrine_dark_danger">#FFFF6B70</color>
 
     <!-- Guirlande de LEDs (l'aperçu utilise les couleurs de l'interface) -->
     <color name="led_base_display">#FF0A0A0A</color>       <!-- support (plein écran) -->

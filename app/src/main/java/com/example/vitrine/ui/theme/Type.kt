@@ -7,7 +7,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /**
- * Typographie plate : peu de graisses, de grands chiffres, des libellés discrets.
+ * Typographie premium : grands titres serrés, grands chiffres, petits libellés en capitales espacées.
+ * - headlineSmall : titre d'écran
  * - displayLarge : grand chiffre principal d'un écran (ex. « 83 % »)
  * - headlineMedium : chiffre d'une carte (ex. « 248 mi »)
  * - titleMedium : titre d'écran, centré
@@ -30,6 +31,14 @@ val Typography = Typography(
         fontSize = 28.sp,
         lineHeight = 34.sp,
         letterSpacing = (-0.5).sp,
+    ),
+    // Titre d'écran : grand, serré, aligné à gauche
+    headlineSmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 26.sp,
+        lineHeight = 30.sp,
+        letterSpacing = (-0.6).sp,
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,

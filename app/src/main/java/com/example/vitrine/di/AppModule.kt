@@ -24,6 +24,7 @@ import com.example.vitrine.feature.timer.usecase.DeleteTaskUseCase
 import com.example.vitrine.feature.timer.usecase.NotifyGoalReachedUseCase
 import com.example.vitrine.feature.timer.usecase.ObserveTaskTimersUseCase
 import com.example.vitrine.feature.timer.usecase.PauseTimerUseCase
+import com.example.vitrine.feature.timer.usecase.ReorderTasksUseCase
 import com.example.vitrine.feature.timer.usecase.StartTimerUseCase
 import com.example.vitrine.feature.timer.usecase.StopTimerUseCase
 import com.example.vitrine.feature.timer.usecase.UpdateTaskUseCase
@@ -66,6 +67,7 @@ val appModule = module {
     factoryOf(::StopTimerUseCase)
     factoryOf(::UpdateTaskUseCase)
     factoryOf(::DeleteTaskUseCase)
+    factoryOf(::ReorderTasksUseCase)
     factoryOf(::NotifyGoalReachedUseCase)
     factoryOf(::ReconstructTimersUseCase)
     viewModelOf(::TimerViewModel)

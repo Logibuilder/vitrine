@@ -8,14 +8,18 @@ import com.example.vitrine.core.util.tickerFlow
 import com.example.vitrine.domain.model.Task
 import com.example.vitrine.domain.model.TaskTimer
 import com.example.vitrine.domain.model.goalProgress
+import com.example.vitrine.domain.model.moved
+import com.example.vitrine.domain.model.orderedBy
 import com.example.vitrine.domain.usecase.ReconstructTimersUseCase
 import com.example.vitrine.feature.timer.usecase.AddTaskUseCase
 import com.example.vitrine.feature.timer.usecase.DeleteTaskUseCase
 import com.example.vitrine.feature.timer.usecase.ObserveTaskTimersUseCase
 import com.example.vitrine.feature.timer.usecase.PauseTimerUseCase
+import com.example.vitrine.feature.timer.usecase.ReorderTasksUseCase
 import com.example.vitrine.feature.timer.usecase.StartTimerUseCase
 import com.example.vitrine.feature.timer.usecase.StopTimerUseCase
 import com.example.vitrine.feature.timer.usecase.UpdateTaskUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -66,19 +70,27 @@ class TimerViewModel(
     private val stopTimer: StopTimerUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val reorderTasksUseCase: ReorderTasksUseCase,
     private val reconstructTimers: ReconstructTimersUseCase,
     clock: Clock,
 ) : ViewModel() {
 
     private val newTaskName = savedState.getStateFlow(KEY_NEW_TASK_NAME, "")
 
+    /**
+     * Ordre choisi pendant un glisser-déposer. Il s'applique tout de suite à l'écran, sans attendre
+     * la base : la liste suit le doigt. Vide tant qu'on n'a rien déplacé.
+     */
+    private val dragOrder = MutableStateFlow<List<Long>>(emptyList())
+
     val uiState: StateFlow<TimerUiState> = combine(
         observeTaskTimers(),
         tickerFlow(now = clock::now),
         newTaskName,
-    ) { list, now, name ->
+        dragOrder,
+    ) { list, now, name, order ->
         TimerUiState(
-            items = list.map { it.toItem(now) },
+            items = list.orderedBy(order) { it.task.id }.map { it.toItem(now) },
             newTaskName = name,
             isLoading = false,
         )
@@ -113,6 +125,18 @@ class TimerViewModel(
     /** Nouveau nom et nouvel objectif. */
     fun updateTask(taskId: Long, name: String, goalMillis: Long) {
         viewModelScope.launch { updateTaskUseCase(taskId, name, goalMillis) }
+    }
+
+    /** Pendant le glissement : la tâche [fromId] prend la place de [toId]. */
+    fun moveTask(fromId: Long, toId: Long) {
+        val current = uiState.value.items.map { it.id }
+        dragOrder.value = current.moved(fromId, toId)
+    }
+
+    /** Au lâcher : on enregistre l'ordre affiché. */
+    fun onTaskDragEnd() {
+        val order = dragOrder.value
+        viewModelScope.launch { reorderTasksUseCase(order) }
     }
 
     fun delete(taskId: Long) {

@@ -28,6 +28,7 @@ fun VitrineTheme(
                 small = VitrineShapes.Control,
                 medium = VitrineShapes.Menu,
                 large = VitrineShapes.Card,
+                extraLarge = VitrineShapes.Card, // fenêtres de dialogue
             ),
             content = content,
         )

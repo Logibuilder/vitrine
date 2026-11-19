@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +47,9 @@ import androidx.compose.ui.unit.min
 import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.core.ui.components.ColorSwatch
+import com.example.vitrine.core.ui.components.CardDivider
 import com.example.vitrine.core.ui.components.SectionLabel
+import com.example.vitrine.core.ui.components.SettingRow
 import com.example.vitrine.core.ui.components.SegmentedControl
 import com.example.vitrine.core.ui.components.StatusDot
 import com.example.vitrine.core.ui.components.VitrineCard
@@ -118,7 +121,7 @@ fun FlashlightHomeScreen(
                 exit = fadeOut() + shrinkVertically(),
             ) {
                 Column {
-                    if (state.torchAvailable) Spacer(Modifier.height(VitrineDimens.SectionGap))
+                    if (state.torchAvailable) CardDivider()
                     ScreenLightSettings(
                         colorArgb = state.colorArgb,
                         brightness = state.brightness,
@@ -181,12 +184,20 @@ private fun TorchCard(
     modifier: Modifier = Modifier,
 ) {
     val background by animateColorAsState(
-        targetValue = if (isOn) VitrineColors.Accent else VitrineColors.SurfaceMuted,
+        targetValue = if (isOn) VitrineColors.Accent else VitrineColors.Ink,
         label = "torch-button",
     )
     val iconColor by animateColorAsState(
-        targetValue = if (isOn) VitrineColors.Surface else VitrineColors.TextPrimary,
+        targetValue = if (isOn) VitrineColors.Surface else VitrineColors.OnInk,
         label = "torch-icon",
+    )
+    val halo by animateColorAsState(
+        targetValue = if (isOn) VitrineColors.Accent.copy(alpha = 0.16f) else Color.Transparent,
+        label = "torch-halo",
+    )
+    val ring by animateColorAsState(
+        targetValue = if (isOn) Color.Transparent else VitrineColors.Divider,
+        label = "torch-ring",
     )
     val actionLabel = stringResource(R.string.light_toggle_torch)
     val stateLabel = stringResource(if (isOn) R.string.light_torch_on else R.string.light_torch_off)
@@ -204,7 +215,15 @@ private fun TorchCard(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
-            val side = min(maxWidth, maxHeight) * 0.6f
+            val side = min(maxWidth, maxHeight) * 0.52f
+            // Anneau autour du bouton : filet discret éteint, halo d'accent allumé
+            Box(
+                modifier = Modifier
+                    .size(side * 1.36f)
+                    .clip(CircleShape)
+                    .background(halo)
+                    .border(1.dp, ring, CircleShape),
+            )
             Box(
                 modifier = Modifier
                     .size(side)
@@ -273,7 +292,7 @@ private fun ScreenLightSettings(
         }
     }
 
-    Spacer(Modifier.height(VitrineDimens.SectionGap))
+    CardDivider()
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -293,24 +312,8 @@ private fun ScreenLightSettings(
         valueRange = SetScreenBrightnessUseCase.MIN_LEVEL..1f,
         colors = SliderDefaults.colors(
             thumbColor = VitrineColors.TextPrimary,
-            activeTrackColor = VitrineColors.Accent,
+            activeTrackColor = VitrineColors.Ink,
             inactiveTrackColor = VitrineColors.SurfaceMuted,
         ),
     )
-}
-
-/** Réglage sur une ligne : libellé à gauche, choix à droite. */
-@Composable
-private fun SettingRow(
-    label: String,
-    control: @Composable () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        SectionLabel(label)
-        control()
-    }
 }

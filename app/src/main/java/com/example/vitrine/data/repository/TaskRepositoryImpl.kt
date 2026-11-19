@@ -18,10 +18,12 @@ class TaskRepositoryImpl(
     override suspend fun getTask(id: Long): Task? = dao.get(id)?.toDomain()
 
     override suspend fun addTask(name: String, createdAt: Long, goalMillis: Long): Long =
-        dao.insert(TaskEntity(name = name.trim(), createdAt = createdAt, goalMillis = goalMillis))
+        dao.insertLast(TaskEntity(name = name.trim(), createdAt = createdAt, goalMillis = goalMillis))
 
     override suspend fun updateTask(id: Long, name: String, goalMillis: Long) =
         dao.update(id, name.trim(), goalMillis)
+
+    override suspend fun reorderTasks(orderedIds: List<Long>) = dao.reorder(orderedIds)
 
     override suspend fun deleteTask(id: Long) = dao.deleteWithHistory(id)
 }

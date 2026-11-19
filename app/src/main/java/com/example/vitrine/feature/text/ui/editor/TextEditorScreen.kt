@@ -5,6 +5,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -52,7 +54,6 @@ import com.example.vitrine.R
 import com.example.vitrine.core.navigation.AppDestination
 import com.example.vitrine.core.ui.components.ColorSwatch
 import com.example.vitrine.core.ui.components.VitrineCard
-import com.example.vitrine.core.ui.components.LedFrame
 import com.example.vitrine.core.ui.components.MarqueeText
 import com.example.vitrine.core.ui.components.SectionLabel
 import com.example.vitrine.core.ui.components.StatusDot
@@ -221,8 +222,9 @@ private fun MessageField(
             keyboardActions = KeyboardActions(onDone = { if (canShow) onShow() }),
             modifier = Modifier.fillMaxWidth(),
             textStyle = TextStyle(
-                fontSize = 20.sp,
-                lineHeight = 28.sp,
+                fontSize = 22.sp,
+                lineHeight = 30.sp,
+                letterSpacing = (-0.3).sp,
                 color = VitrineColors.TextPrimary,
             ),
             cursorBrush = SolidColor(VitrineColors.Accent),
@@ -231,7 +233,8 @@ private fun MessageField(
                     Text(
                         text = stringResource(R.string.text_placeholder),
                         color = VitrineColors.TextMuted,
-                        fontSize = 20.sp,
+                        fontSize = 22.sp,
+                        letterSpacing = (-0.3).sp,
                     )
                 }
                 inner()
@@ -252,11 +255,13 @@ private fun MessageField(
                 Text(
                     text = stringResource(R.string.text_clear),
                     style = MaterialTheme.typography.labelMedium,
-                    color = VitrineColors.Accent,
+                    color = VitrineColors.TextPrimary,
+                    // Petite pilule neutre, comme les boutons secondaires
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(VitrineShapes.Pill)
+                        .background(VitrineColors.SurfaceMuted)
                         .clickable(onClick = onClear)
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
                 )
             }
         }
@@ -264,7 +269,7 @@ private fun MessageField(
 }
 
 /**
- * Aperçu : cadre de LEDs animées, message sur une ligne qui défile comme à l'affichage.
+ * Aperçu : cadre simple, message sur une ligne qui défile comme à l'affichage.
  * Un appui sur l'aperçu affiche le message en plein écran.
  */
 @Composable
@@ -297,21 +302,20 @@ private fun PreviewSection(
                 color = if (enabled) VitrineColors.Accent else VitrineColors.Divider,
             )
         }
-        LedFrame(
-            contentColor = bgColor,
+        // Cadre simple, dans la couleur de fond choisie (sans LEDs)
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .clip(shape)
+                .background(bgColor)
+                .border(1.dp, VitrineColors.Divider, shape)
                 .clickable(
                     enabled = enabled,
                     onClickLabel = stringResource(R.string.text_show_full_screen),
                     role = Role.Button,
                     onClick = onClick,
                 ),
-            cornerRadius = VitrineDimens.CardRadius,
-            ledBand = 12.dp,
-            ledSpacing = 15.dp,
         ) {
             Box(
                 modifier = Modifier

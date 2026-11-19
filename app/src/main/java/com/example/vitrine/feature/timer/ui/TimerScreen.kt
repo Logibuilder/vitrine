@@ -52,7 +52,7 @@ fun TimerScreen(
     fun askNotificationPermissionOnce() {
         if (permissionAsked || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
         if (!granted) {
             permissionAsked = true
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -76,6 +76,8 @@ fun TimerScreen(
         onReset = viewModel::reset,
         onUpdate = viewModel::updateTask,
         onDelete = viewModel::delete,
+        onMoveTask = viewModel::moveTask,
+        onTaskDragEnd = viewModel::onTaskDragEnd,
         exactAlarmAllowed = exactAlarmAllowed,
         onAllowExactAlarm = { context.openExactAlarmSettings() },
         onNavigate = onNavigate,
@@ -84,7 +86,7 @@ fun TimerScreen(
 
 private fun Context.canScheduleExactAlarms(): Boolean =
     Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
-        getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
+            getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
 
 /** Ouvre le réglage « Alarmes et rappels » de l'application (Android 12+). */
 private fun Context.openExactAlarmSettings() {

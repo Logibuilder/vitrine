@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class TaskDao {
 
-    @Query("SELECT * FROM tasks ORDER BY createdAt ASC")
+    /** Dans l'ordre choisi par l'utilisateur ; à rang égal, la plus ancienne d'abord. */
+    @Query("SELECT * FROM tasks ORDER BY position ASC, id ASC")
     abstract fun observeAll(): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")
@@ -18,6 +19,22 @@ abstract class TaskDao {
 
     @Insert
     abstract suspend fun insert(task: TaskEntity): Long
+
+    @Query("SELECT COALESCE(MAX(position), 0) + 1 FROM tasks")
+    abstract suspend fun nextPosition(): Long
+
+    /** Ajoute la tâche en bas de la liste. */
+    @Transaction
+    open suspend fun insertLast(task: TaskEntity): Long = insert(task.copy(position = nextPosition()))
+
+    @Query("UPDATE tasks SET position = :position WHERE id = :id")
+    abstract suspend fun setPosition(id: Long, position: Long)
+
+    /** Enregistre le nouvel ordre : la première tâche de [orderedIds] prend le rang 1, etc. */
+    @Transaction
+    open suspend fun reorder(orderedIds: List<Long>) {
+        orderedIds.forEachIndexed { index, id -> setPosition(id, index + 1L) }
+    }
 
     @Query("UPDATE tasks SET name = :name, goalMillis = :goalMillis WHERE id = :id")
     abstract suspend fun update(id: Long, name: String, goalMillis: Long)

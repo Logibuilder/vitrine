@@ -38,9 +38,9 @@ fun <T> SegmentedControl(
 ) {
     Row(
         modifier = modifier
-            .height(36.dp)
+            .height(38.dp)
             .clip(VitrineShapes.Pill)
-            .background(VitrineColors.Background)
+            .background(VitrineColors.SurfaceMuted)
             .padding(3.dp)
             .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -48,7 +48,7 @@ fun <T> SegmentedControl(
         options.forEach { option ->
             val isSelected = option == selected
             val background by animateColorAsState(
-                targetValue = if (isSelected) VitrineColors.Surface else Color.Transparent,
+                targetValue = if (isSelected) VitrineColors.Ink else Color.Transparent,
                 label = "segment-background",
             )
             Box(
@@ -68,7 +68,7 @@ fun <T> SegmentedControl(
                     text = label(option),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-                    color = if (isSelected) VitrineColors.TextPrimary else VitrineColors.TextMuted,
+                    color = if (isSelected) VitrineColors.OnInk else VitrineColors.TextMuted,
                 )
             }
         }
